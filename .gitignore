@@ -1,14 +1,32 @@
+## dev tools
+/.lein-*
+/*-init.clj
+profiles.clj
+nomis-ns-graph.png
+
+## logs
+/*.log
+
+## output
+out
+/target
+/classes
+/checkouts
+/resources/public/js/compiled
+/resources/public/css/main.css
+*.class
 pom.xml
 pom.xml.asc
-*.jar
-*.class
-/lib/
-/classes/
-/target/
-/checkouts/
-.lein-deps-sum
-.lein-repl-history
-.lein-plugins/
-.lein-failures
+
+## REPL
 .nrepl-port
-.cpcache/
+
+## cljs
+.shadow-cljs
+node_modules
+# package.json
+package-lock.json
+
+## various
+.hgignore
+.hg/

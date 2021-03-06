@@ -1,0 +1,39 @@
+{:lein   true
+
+ :nrepl {
+         ;; :port 8777
+         :middleware [refactor-nrepl.middleware/wrap-refactor] ; for Emacs
+         :init-ns norns-index.app
+         }
+
+ :dev-http {8666 "resources/public"}
+
+ :builds
+ {:app
+  {:target            :browser
+   :compiler-options  {:infer-externs :auto}
+   :output-dir        "resources/public/js/compiled"
+   :asset-path        "/js/compiled"
+   :modules           {:app {:init-fn norns-index.app/init
+                             :preloads [devtools.preload
+                                        ;; day8.re-frame-10x.preload
+                                        ]}}
+
+   :dev               {:compiler-options
+                       {:closure-defines {
+                                          ;; re-frame.trace.trace-enabled?        true
+                                          ;; day8.re-frame.tracing.trace-enabled? true
+                                          }
+                        :external-config {:devtools/config
+                                          {:features-to-install    [:formatters :hints]
+                                           :fn-symbol              "F"
+                                           :print-config-overrides true}}}
+                       :devtools {:repl-pprint true
+                                  :preloads [devtools.preload]}}
+
+   :release           {:build-options
+                       {:ns-aliases
+                        {
+                         ;; day8.re-frame.tracing day8.re-frame.tracing-stubs
+                         }}}
+   }}}

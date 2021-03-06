@@ -1,0 +1,58 @@
+@tailwind base;
+
+@tailwind components;
+
+/* NB: put custom defs here */
+
+body {
+    font-family: roboto,"helvetica neue",helvetica,noto,"segoe ui",arial,sans-serif;
+}
+
+h2 {
+    font-size: 2em;
+    margin-left: 0.5em;
+    margin-top: 1em;
+    font-style: italic;
+}
+
+.script-category-section {
+    background-color: #f5f6fa;
+    margin: 0 15px;
+}
+
+.script-panels-container {
+    margin: -5px;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.script-panel-container {
+    padding: 5px;
+}
+.script-panel {
+    background-color: #eeeceb;
+    padding: 10px;
+
+    transition: all 0.3s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+
+}
+.script-panel:hover {
+    /* transform: scale(1.02); */
+    transform: scale(1.1);
+}
+.script-title {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.img-norns-screenshot {
+    /* NB: we need to make multiple declaration to support all browsers... */
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+@tailwind utilities;
