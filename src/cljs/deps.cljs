@@ -4,5 +4,5 @@
 
             ;; tailwind
             "tailwindcss" "^2.0.3"
-            "tailwindcss/forms" "^1.1.4"
+            "@tailwindcss/forms" "^0.2.1"
             }}
