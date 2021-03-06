@@ -19,9 +19,6 @@
 
 ;; CONF
 
-(def screenshot-scale 3)
-(def screenshot-padding 10)
-
 (def script-list
   {"awake" {:types [:sequencer]}
    "barcode" {:types [:looper]}
@@ -130,10 +127,16 @@
 ;; VIEWS
 
 (defn main-view []
-  [:div
-   [:input {:type "text"
-            :on-change (fn [e]
-                         (swap! state assoc-in [:filter :txt] e.target.value))}]
+  [:div.main-view
+   [:div.script-category-section
+    [:h2 "Filter"]
+    [:label.block
+     [:span "Name"]
+     [:input
+      {:type "text"
+       :style {:margin-left "0.5em"}
+       :on-change (fn [e]
+                    (swap! state assoc-in [:filter :txt] e.target.value))}]]]
    (doall
     (map script-category-section (keys script-categories)))])
 
@@ -159,10 +162,5 @@
      [:p.script-title (clojure.string/upper-case script-name)]]]])
 
 (defn screenshot [script-name]
-  [:div {:style {:background-color "black"
-                 :width (str (+ (* screenshot-scale 128) (* 2 screenshot-padding)) "px")
-                 :height (str (+ (* screenshot-scale 64) (* 2 screenshot-padding)) "px")
-                 :padding (str screenshot-padding "px")}}
-   [:img.img-norns-screenshot {:src (str "img/screenshot/" script-name ".png")
-                               :style {:width (str (* screenshot-scale 128) "px")
-                                       :height "auto"}}]])
+  [:div.norns-screenshot-container
+   [:img.img-norns-screenshot {:src (str "img/screenshot/" script-name ".png")}]])
