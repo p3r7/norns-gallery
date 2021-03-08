@@ -108,6 +108,19 @@
    :util "Utilities"
    })
 
+(def script-categories-order
+  [:synth
+   :granular
+   :sample-player
+   :sampler
+   :sequencer
+   :tracker
+   :cc
+   :audio-effect
+   :looper
+   :midi-effect
+   :util])
+
 
 
 ;; STATE
@@ -237,7 +250,7 @@
        :on-change (fn [e]
                     (swap! state assoc-in [:filter :txt] e.target.value))}]]]
    (doall
-    (map script-category-section (keys script-categories)))])
+    (map script-category-section script-categories-order))])
 
 
 (defn script-category-section [script-category]
