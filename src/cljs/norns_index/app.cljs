@@ -241,10 +241,13 @@
 
 
 (defn script-category-section [script-category]
-  (when-let [matched-scripts (keys (filter (fn [[script-name script-props]]
-                                             (and
-                                              (member? script-category (:types script-props))
-                                              (clojure.string/includes? script-name (get-in @state [:filter :txt])))) script-list))]
+  (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
+                                           (and
+                                            (member? script-category (:types script-props))
+                                            (clojure.string/includes? script-name (get-in @state [:filter :txt])))) script-list)
+                                 keys
+                                 sort
+                                 seq)]
     ^{:key (str script-category)}
     [:div.script-category-section
      [:h2 (get script-categories script-category)]
