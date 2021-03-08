@@ -226,8 +226,8 @@
 
 (defn norns-script-features->icons [features]
   (->
-   (map #(% features) [midi-feature->icon-maybe
-                       audio-feature->icon-maybe
+   (map #(% features) [audio-feature->icon-maybe
+                       midi-feature->icon-maybe
                        grid-feature->icon-maybe
                        #(simple-feature->icon-maybe :kbd %)
                        #(simple-feature->icon-maybe :arc %)])
