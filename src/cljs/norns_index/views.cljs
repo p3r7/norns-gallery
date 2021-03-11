@@ -76,36 +76,18 @@
          {:colSpan 3}
          [:div.switch-toggle.switch-3.switch-candy
 
-          (when is-requirable
-
-            [:span
-             [:input.switch-filter-in-required
-              {:type "radio"
-               :id (str "radio-" (name feature) "-required")
-               :name (str "radio-" (name feature))
-               :value "required"
-               :style {:margin-left "0.5em"}
-               :on-change on-change-visibility-fn
-               :checked (= :required (get-in @state [:filter :io feature :display]))
-               }]
-             [:label.noselect
-              {:for (str "radio-" (name feature) "-required")}
-              "only-required"]]
-
-            )
-
-          [:input.switch-filter-in
+          [:input.switch-filter-out
            {:type "radio"
-            :id (str "radio-" (name feature) "-only")
+            :id (str "radio-" (name feature) "-no")
             :name (str "radio-" (name feature))
-            :value "only"
+            :value "no"
             :style {:margin-left "0.5em"}
             :on-change on-change-visibility-fn
-            :checked (= :only (get-in @state [:filter :io feature :display]))
+            :checked (= :no (get-in @state [:filter :io feature :display]))
             }]
           [:label.noselect
-           {:for (str "radio-" (name feature) "-only")}
-           "only"]
+           {:for (str "radio-" (name feature) "-no")}
+           "without"]
 
           [:input.switch-neutral
            {:type "radio"
@@ -120,18 +102,34 @@
            {:for (str "radio-" (name feature) "-optional")}
            "n/a"]
 
-          [:input.switch-filter-out
+          [:input.switch-filter-in
            {:type "radio"
-            :id (str "radio-" (name feature) "-no")
+            :id (str "radio-" (name feature) "-only")
             :name (str "radio-" (name feature))
-            :value "no"
+            :value "only"
             :style {:margin-left "0.5em"}
             :on-change on-change-visibility-fn
-            :checked (= :no (get-in @state [:filter :io feature :display]))
+            :checked (= :only (get-in @state [:filter :io feature :display]))
             }]
           [:label.noselect
-           {:for (str "radio-" (name feature) "-no")}
-           "without"]
+           {:for (str "radio-" (name feature) "-only")}
+           "only"]
+
+          (when is-requirable
+            [:span
+             [:input.switch-filter-in-required
+              {:type "radio"
+               :id (str "radio-" (name feature) "-required")
+               :name (str "radio-" (name feature))
+               :value "required"
+               :style {:margin-left "0.5em"}
+               :on-change on-change-visibility-fn
+               :checked (= :required (get-in @state [:filter :io feature :display]))
+               }]
+             [:label.noselect
+              {:for (str "radio-" (name feature) "-required")}
+              "only-required"]])
+
           ]]]
        [:tr
         (when (> (count feature-all-default-vals) 1)
