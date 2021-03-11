@@ -10,6 +10,7 @@
  norns-script-features->icons
  ;; sub-views
  filter-panel
+ filter-section-io-feature
  script-panel screenshot feature
  script-category-section)
 
@@ -27,18 +28,6 @@
 
 ;; VIEW: FILTER PANEL
 
-(defn on-change-filter-grid [e]
-  (swap! state assoc-in [:filter :io :grid :display] (keyword e.target.value)))
-
-(defn on-change-filter-grid-size [e]
-  ;; (js/console.info e.target.values)
-
-  (.stopPropagation e)
-
-  (if e.target.checked
-    (swap! state update-in [:filter :io :grid :sizes] conj (keyword (str "grid_" e.target.value)))
-    (swap! state update-in [:filter :io :grid :sizes] disj (keyword (str "grid_" e.target.value)))))
-
 (defn filter-panel []
   [:div.script-category-section
    [:h2 "Filter"]
@@ -49,118 +38,103 @@
       :style {:margin-left "0.5em"}
       :on-change (fn [e]
                    (swap! state assoc-in [:filter :txt] e.target.value))}]]
+   (filter-section-io-feature :grid)])
 
-   ;; TODO: filter in/out/only, or only/exclude
+(defn filter-section-io-feature [feature]
+  (let [feature-def (get conf/io-features feature)
 
+        feature-std-vals (:values feature-def)
+        feature-catch-all-val (:catch-all-value feature-def)
+        feature-all-default-vals (conj feature-std-vals feature-catch-all-val)
 
-   [:table
-    [:thead
-     [:tr
-      [:th {:colSpan 3}
-       "grid"]]]
-    [:tbody
-     [:tr
-      [:td [:label.block
-            [:input
-             {:type "radio"
-              :name "radio-grid"
-              :value "optional"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid
-              :checked (= :optional (get-in @state [:filter :io :grid :display]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "eventually"]]]
-      [:td [:label.block
-            [:input
-             {:type "radio"
-              :name "radio-grid"
-              :value "only"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid
-              :checked (= :only (get-in @state [:filter :io :grid :display]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "only"]
-            ]]
-      [:td [:label.block
-            [:input
-             {:type "radio"
-              :name "radio-grid"
-              :value "required"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid
-              :checked (= :required (get-in @state [:filter :io :grid :display]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "only-required"]
-            ]]
-      [:td [:label.block
-            [:input
-             {:type "radio"
-              :name "radio-grid"
-              :value "no"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid
-              :checked (= :no (get-in @state [:filter :io :grid :display]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "no"]
-            ]]]
-     [:tr
-      [:td [:label.block
-            [:input
-             {:type "checkbox"
-              :name "checkbox-grid-size"
-              :value "128"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid-size
-              :defaultChecked true
-              ;; :checked (member? :grid-128 (get-in @state [:filter :io :grid :sizes]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "128"]
-            ]]
-      [:td [:label.block
-            [:input
-             {:type "checkbox"
-              :name "checkbox-grid-size"
-              :value "64"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid-size
-              :defaultChecked true
-              ;; :checked (member? :grid-64 (get-in @state [:filter :io :grid :sizes]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "64"]
-            ]]
-      [:td [:label.block
-            [:input
-             {:type "checkbox"
-              :name "checkbox-grid-size"
-              :value "any"
-              :style {:margin-left "0.5em"}
-              :on-change on-change-filter-grid-size
-              :defaultChecked true
-              ;; :checked (member? :grid-any (get-in @state [:filter :io :grid :sizes]))
-              }]
-            [:span
-             {:style {:margin-left "0.5em"}}
-             "arbitrary"]
-            ]]
+        is-requirable (:is-required feature-def)
 
-      ]]
-    ]
+        on-change-visibility-fn (fn [e]
+                                  (swap! state assoc-in [:filter :io feature :display] (keyword e.target.value)))
+        on-change-value-fn (fn [e]
+                             (.stopPropagation e)
+                             (if e.target.checked
+                               (swap! state update-in [:filter :io feature :values] conj (keyword e.target.value))
+                               (swap! state update-in [:filter :io feature :values] disj (keyword e.target.value))))]
 
-
-   ])
-
+    [:table
+     [:thead
+      [:tr
+       [:th {:colSpan 3}
+        (name feature)]]]
+     [:tbody
+      ;; REVIEW: filter in/out/only, or only/exclude
+      [:tr
+       [:td [:label.block
+             [:input
+              {:type "radio"
+               :name (str "radio-" (name feature))
+               :value "optional"
+               :style {:margin-left "0.5em"}
+               :on-change on-change-visibility-fn
+               :checked (= :optional (get-in @state [:filter :io feature :display]))
+               }]
+             [:span
+              {:style {:margin-left "0.5em"}}
+              "eventually"]]]
+       [:td [:label.block
+             [:input
+              {:type "radio"
+               :name (str "radio-" (name feature))
+               :value "only"
+               :style {:margin-left "0.5em"}
+               :on-change on-change-visibility-fn
+               :checked (= :only (get-in @state [:filter :io feature :display]))
+               }]
+             [:span
+              {:style {:margin-left "0.5em"}}
+              "only"]
+             ]]
+       (when is-requirable
+         [:td [:label.block
+               [:input
+                {:type "radio"
+                 :name (str "radio-" (name feature))
+                 :value "required"
+                 :style {:margin-left "0.5em"}
+                 :on-change on-change-visibility-fn
+                 :checked (= :required (get-in @state [:filter :io feature :display]))
+                 }]
+               [:span
+                {:style {:margin-left "0.5em"}}
+                "only-required"]
+               ]])
+       [:td [:label.block
+             [:input
+              {:type "radio"
+               :name (str "radio-" (name feature))
+               :value "no"
+               :style {:margin-left "0.5em"}
+               :on-change on-change-visibility-fn
+               :checked (= :no (get-in @state [:filter :io feature :display]))
+               }]
+             [:span
+              {:style {:margin-left "0.5em"}}
+              "no"]
+             ]]]
+      [:tr
+       (doall
+        (map
+         (fn [feature-v]
+           (let [label (clojure.string/replace-first (name feature-v) (str (name feature) "_") "")]
+             ^{:key (str "filter-block-" (name feature-v))}
+             [:td [:label.block
+                   [:input
+                    {:type "checkbox"
+                     :name (str "checkbox-" (name feature) "-value")
+                     :value (name feature-v)
+                     :style {:margin-left "0.5em"}
+                     :on-change on-change-value-fn
+                     :defaultChecked true}]
+                   [:span
+                    {:style {:margin-left "0.5em"}}
+                    label]]]))
+         feature-all-default-vals))]]]))
 
 
 

@@ -6,7 +6,8 @@
 
 (def io-features
   {:grid {:values #{:grid_64 :grid_128}
-          :catch-all-value :grid_any}})
+          :catch-all-value :grid_any
+          :is-required true}})
 
 
 

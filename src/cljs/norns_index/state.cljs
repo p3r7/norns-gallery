@@ -13,7 +13,7 @@
                     {:txt ""
                      :io
                      {:grid {:display :optional
-                             :sizes #{:grid_128 :grid_64 :grid_any}}}
+                             :values #{:grid_128 :grid_64 :grid_any}}}
                      {:arc {:display :optional}}
                      {:crow {:display :optional}}
                      }}))
@@ -26,12 +26,13 @@
   (let [
         ;; filters
         feature-display-f (get-in @state [:filter :io feature :display])
-        feature-display-vals-f (get-in @state [:filter :io feature :sizes])
+        feature-display-vals-f (get-in @state [:filter :io feature :values])
 
         ;; feature familly values
         feature-def (get conf/io-features feature)
         feature-std-vals (:values feature-def)
-        feature-all-default-vals (conj feature-std-vals (:catch-all-value feature-def))
+        feature-catch-all-val (:catch-all-value feature-def)
+        feature-all-default-vals (conj feature-std-vals feature-catch-all-val)
 
         ;; tested script
         script-features (:features script-def)
