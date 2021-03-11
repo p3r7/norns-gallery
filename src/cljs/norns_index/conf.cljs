@@ -7,8 +7,17 @@
 (def io-features
   {:grid {:values #{:grid_64 :grid_128}
           :catch-all-value :grid_any
-          :is-required true}})
+          :is-required true}
+   :arc {:values #{:arc}}
+   :crow {:values #{:crow}}
+   :midi {:values #{:midi_in :midi_out}}
+   })
 
+(def ordered-filterable-io-features
+  [:grid
+   :arc
+   :crow
+   :midi])
 
 
 ;; CONF: SCRIPT INVENTORY
