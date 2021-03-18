@@ -9,6 +9,9 @@
    [reagent.core :as r]
    [reagent.dom :as rdom]
 
+   ;; state
+   [norns-index.dynamic-conf :as dynamic-conf]
+
    ;; app
    [norns-index.views :as views]
    ))
@@ -40,7 +43,10 @@
   "Mount transpilled js code into #app dome element.
   Gets called both at page load (`init`) and on automatic code reload by shadow-cljs (`on-reload`)."
   []
-  (mount-app-element [views/main-view]))
+  (mount-app-element [views/main-view])
+
+  (dynamic-conf/get-from-wiki-js)       ; NB: gets stored in `norns-index.state/state`
+  )
 
 
 

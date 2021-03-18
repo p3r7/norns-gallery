@@ -19,6 +19,19 @@
    :crow
    :midi])
 
+(defn flattended-io-features []
+  (set
+   (mapcat
+    (fn [f-props]
+      (let [std-vs (:values f-props)
+            catch-all-v (:catch-all-value f-props)
+            all-vs (if catch-all-v
+                     (conj std-vs catch-all-v)
+                     std-vs)]
+        all-vs))
+    (vals io-features))))
+
+
 
 ;; CONF: SCRIPT INVENTORY
 
@@ -67,7 +80,7 @@
                       :features #{:midi_in :audio_out :grid_128}}
    "mouse" {:types [:sequencer]
             :features #{:kbd :mouse :audio_out :midi_out}}
-   "ooooooo" {:types [:looper]
+   "oooooo" {:types [:looper]
               :features #{:audio_in :audio_out}}
    "orca" {:types [:tracker]
            :features #{:audio_in :audio_out :kbd :arc :crow :midi_out :grid_any}
@@ -110,29 +123,44 @@
    }
   )
 
+;; (def script-categories
+;;   {:synth "Synths & Drones"
+;;    :granular "Granular Processing"
+;;    :sample-player "Sample Players"
+;;    :sampler "Basic Samplers"
+;;    :sequencer "Sequencers"
+;;    :tracker "Trackers"
+;;    :cc "Control Modulation Sources"
+;;    :audio-effect "Audio Effets"
+;;    :looper "Loopers, Live Samplers & Crazy Delays"
+;;    :midi-effect "Midi Effets"
+;;    :util "Utilities"
+;;    })
+
+;; (def script-categories-order
+;;   [:synth
+;;    :granular
+;;    :sample-player
+;;    :sampler
+;;    :sequencer
+;;    :tracker
+;;    :cc
+;;    :audio-effect
+;;    :looper
+;;    :midi-effect
+;;    :util])
+
 (def script-categories
-  {:synth "Synths & Drones"
-   :granular "Granular Processing"
-   :sample-player "Sample Players"
-   :sampler "Basic Samplers"
-   :sequencer "Sequencers"
-   :tracker "Trackers"
-   :cc "Control Modulation Sources"
-   :audio-effect "Audio Effets"
-   :looper "Loopers, Live Samplers & Crazy Delays"
-   :midi-effect "Midi Effets"
-   :util "Utilities"
+  {"audio fx" "audio fx"
+   "granulators" "granulators"
+   "loopers + live samplers" "loopers + live samplers"
+   "sequencers" "sequencers"
+   "synths" "synths"
    })
 
 (def script-categories-order
-  [:synth
-   :granular
-   :sample-player
-   :sampler
-   :sequencer
-   :tracker
-   :cc
-   :audio-effect
-   :looper
-   :midi-effect
-   :util])
+  ["audio fx"
+   "granulators"
+   "loopers + live samplers"
+   "sequencers"
+   "synths"])

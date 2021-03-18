@@ -9,7 +9,9 @@
 
 ;; STATE
 
-(defonce state (r/atom {:filter
+(defonce state (r/atom {:script-list {}
+
+                        :filter
                         {:txt ""
                          :io
                          {:grid {:display :optional
@@ -68,7 +70,7 @@
 
 
 (defn show-script? [script-name]
-  (let [script-def (get conf/script-list script-name)
+  (let [script-def (get-in @state [:script-list script-name])
         script-features (:features script-def)
         filter-txt (get-in @state [:filter :txt])]
     (and

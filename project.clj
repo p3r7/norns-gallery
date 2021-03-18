@@ -8,7 +8,8 @@
                   :exclusions [com.google.javascript/closure-compiler-unshaded
                                org.clojure/google-closure-library
                                org.clojure/google-closure-library-third-party]]
-                 ;; [org.clojure/core.async "0.4.500"]
+                 [com.taoensso/encore "3.18.0"]
+                 [org.clojure/core.async "0.4.500"]
                  ;; [com.rpl/specter "1.1.3"]
                  ;; [yogthos/config "1.1.5"]
 

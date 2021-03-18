@@ -160,7 +160,7 @@
                                            (and
                                             (member? script-category (:types script-props))
                                             (show-script? script-name)
-                                            )) conf/script-list)
+                                            )) (:script-list @state))
                                  keys
                                  sort
                                  seq)]
@@ -176,8 +176,8 @@
 ;; VIEWS: SCRIPT PANEL
 
 (defn script-panel [script-category script-name]
-  (let [features (get-in conf/script-list [script-name :features])
-        required-features (get-in conf/script-list [script-name :required-features])
+  (let [features (get-in @state [:script-list script-name :features])
+        required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
     ^{:key (str script-category "." script-name)}
     [:div.script-panel-container
