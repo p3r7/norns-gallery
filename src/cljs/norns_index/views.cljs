@@ -237,7 +237,11 @@
     (simple-feature->icon :midi_in)
 
     (member? :midi_out features)
-    (simple-feature->icon :midi_out)))
+    (simple-feature->icon :midi_out)
+
+    ;; NB: unspecified fallback is current implem
+    (member? :midi features)
+    (simple-feature->icon "midi")))
 
 (defn audio-feature->icon-maybe [features required-features]
   (cond
@@ -248,7 +252,11 @@
     (simple-feature->icon :audio_in)
 
     (member? :audio_out features)
-    (simple-feature->icon :audio_out)))
+    (simple-feature->icon :audio_out)
+
+    ;; NB: unspecified fallback is current implem
+    (member? :audio features)
+    (simple-feature->icon "audio")))
 
 (defn grid-feature->icon-maybe [features required-features]
   (let [is-required (when required-features
@@ -261,8 +269,11 @@
       (str "grid_64-128" (when is-required "!!"))
 
       (member? :grid_128 features)
-      (simple-feature->icon :grid_128 is-required))))
+      (simple-feature->icon :grid_128 is-required)
 
+      ;; NB: unspecified fallback is current implem
+      (member? :grid features)
+      (simple-feature->icon "audio"))))
 
 (defn norns-script-features->icons [features required-features]
   (->
