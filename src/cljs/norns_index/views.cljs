@@ -186,7 +186,7 @@
      ;; {:style {:display (if (show-script? script-name) "block" "none")}} ;NB: this might be an optim, less diffs between React & actual DOM
      [:div.script-panel
       {:on-click (fn [e]
-                   (set! (.. js/document -location -href) url))}
+                   (set! (.. js/window -top -location -href) url))}
       [screenshot script-name]
       [:div
        [:p.script-title (clojure.string/upper-case script-name)]
