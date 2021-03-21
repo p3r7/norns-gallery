@@ -156,6 +156,7 @@
    "loopers + live samplers" "loopers + live samplers"
    "sequencers" "sequencers"
    "synths" "synths"
+   "art" "art"
    })
 
 (def script-categories-order
@@ -163,4 +164,5 @@
    "granulators"
    "loopers + live samplers"
    "sequencers"
-   "synths"])
+   "synths"
+   "art"])
