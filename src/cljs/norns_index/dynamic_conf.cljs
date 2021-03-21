@@ -21,7 +21,7 @@
 (defn get-from-wiki-js []
   (go
     (let [url "https://norns.community/graphql"
-          q "{pages { list { path, tags } } }"
+          q "{pages { list { path, tags, description } } }"
           response (<! (http/get url
                                  {:with-credentials? false
                                   ;; :headers {"Authorization" (str "Bearer " bearer-token)}
@@ -72,11 +72,13 @@
     tags)))
 
 (defn wiki-js-page-def->script-def [page-def]
-  (let [tags (:tags page-def)
+  (let [description (:description page-def)
+        tags (:tags page-def)
         categories (script-categories-from-wiki-js-tags tags)
         io-features (script-io-features-from-wiki-js-tags tags)
         required-io-features (script-required-io-features-from-wiki-js-tags tags)]
     {:types categories
+     :description description
      :features io-features
      :required-features required-io-features
      :author (:author page-def)

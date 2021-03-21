@@ -177,6 +177,7 @@
 
 (defn script-panel [script-category script-name]
   (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
+        description (get-in @state [:script-list script-name :description])
         features (get-in @state [:script-list script-name :features])
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
@@ -189,6 +190,7 @@
       [screenshot script-name]
       [:div
        [:p.script-title (clojure.string/upper-case script-name)]
+       [:p.script-description description]
        [:div.flex.flex-wrap
         (doall
          (map #(feature % script-category script-name) feature-icons))]
