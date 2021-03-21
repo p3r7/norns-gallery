@@ -20,7 +20,7 @@
 
 (defn main-view []
   [:div.main-view
-   [filter-panel]
+   ;; [filter-panel]
    (doall
     (map script-category-section conf/script-categories-order))])
 
