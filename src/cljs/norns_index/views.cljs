@@ -176,13 +176,16 @@
 ;; VIEWS: SCRIPT PANEL
 
 (defn script-panel [script-category script-name]
-  (let [features (get-in @state [:script-list script-name :features])
+  (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
+        features (get-in @state [:script-list script-name :features])
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
     ^{:key (str script-category "." script-name)}
     [:div.script-panel-container
      ;; {:style {:display (if (show-script? script-name) "block" "none")}} ;NB: this might be an optim, less diffs between React & actual DOM
      [:div.script-panel
+      {:on-click (fn [e]
+                   (set! (.. js/document -location -href) url))}
       [screenshot script-name]
       [:div
        [:p.script-title (clojure.string/upper-case script-name)]
