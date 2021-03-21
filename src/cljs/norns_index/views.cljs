@@ -192,8 +192,11 @@
        ]]]))
 
 (defn screenshot [script-name]
-  [:div.norns-screenshot-container
-   [:img.img-norns-screenshot {:src (str "img/screenshot/" script-name ".png")}]])
+  (let [author (get-in @state [:script-list script-name :author])]
+    [:div.norns-screenshot-container
+     ;; [:img.img-norns-screenshot {:src (str "img/screenshot/" script-name ".png")}]
+     [:img.img-norns-screenshot {:src (str "https://norns.community/community/" author "/" script-name ".png")}]
+     ]))
 
 (defn feature [feature-name & [script-category script-name]]
   ^{:key (str script-category "." script-name "." feature-name)}
