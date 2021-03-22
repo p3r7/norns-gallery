@@ -22,14 +22,16 @@
 (defn flattended-io-features []
   (set
    (mapcat
-    (fn [f-props]
+    (fn [[f f-props]]
       (let [std-vs (:values f-props)
             catch-all-v (:catch-all-value f-props)
+            unspecified-v f             ; NB: current simplified implem
+            all-vs (conj std-vs unspecified-v)
             all-vs (if catch-all-v
-                     (conj std-vs catch-all-v)
-                     std-vs)]
+                     (conj all-vs catch-all-v)
+                     all-vs)]
         all-vs))
-    (vals io-features))))
+    io-features)))
 
 
 
