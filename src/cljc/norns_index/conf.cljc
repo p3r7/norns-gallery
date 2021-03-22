@@ -153,18 +153,23 @@
 ;;    :util])
 
 (def script-categories
-  {"audio fx" "audio fx"
+  {"art" "art"
+   "audio fx" "audio fx"
+   "drums" "drums"
    "granulators" "granulators"
    "loopers + live samplers" "loopers + live samplers"
    "sequencers" "sequencers"
    "synths" "synths"
-   "art" "art"
+   "utilities" "utilities"
    })
 
 (def script-categories-order
-  ["audio fx"
+  ["art"
+   "audio fx"
+   "drums"
    "granulators"
    "loopers + live samplers"
    "sequencers"
    "synths"
-   "art"])
+   "utilities"
+   ])
