@@ -10,6 +10,8 @@
 }
 
 body {
+    margin: 0;
+    padding: 0;
     font-family: roboto,"helvetica neue",helvetica,noto,"segoe ui",arial,sans-serif;
 }
 
@@ -23,43 +25,44 @@ body {
 }
 
 .main-view {
-    margin: 0 15px;
+    margin: 0 !important;
 }
 
 h2 {
-    font-size: 2em;
-    margin-left: 0.5em;
-    margin-top: 1em;
+    font-size: 24px;
+    margin: 0;
     font-style: italic;
 }
 
 .script-category-section {
     background-color: #f5f6fa;
-    /* margin: 0 15px; */
 }
 
 .script-panels-container {
     margin: -5px;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    /* margin-top: 0.5em; */
-    /* margin-bottom: 0.5em; */
 }
 
 .script-panel-container {
     padding: 5px;
+    width: 100%;
 }
+
+@media (min-width: 641px) {
+    .script-panel-container {
+        width: 512px;
+    }
+}
+
 .script-panel {
     background-color: #eeeceb;
     padding: 10px;
-
     cursor: pointer;
     /* transition: all 0.3s cubic-bezier(0.25, 0.45, 0.45, 0.95); */
 }
 
 .script-panel:hover {
-    /* transform: scale(1.02); */
-    transform: scale(1.05);
+    background: #1976d2;
+    color: #ffffff;
 }
 .script-title {
     font-size: 1em;
@@ -71,17 +74,20 @@ h2 {
 }
 
 .norns-screenshot-container {
-    background-color: black;
-
+/*  background-color: black;
     width: calc(var(--norns-screenshot-scale) * 128px + 2 * var(--norns-screenshot-padding));
     height: calc(var(--norns-screenshot-scale) * 64px + 2 * var(--norns-screenshot-padding));
-    padding: var(--norns-screenshot-padding);
+    padding: var(--norns-screenshot-padding);*/
 }
 
-.img-norns-screenshot {
-    width: calc(var(--norns-screenshot-scale) * 128px);
-    height: auto;
+.norns-screenshot-container img {
+    width: 100%;
+    height: 100%;
+}   
 
+.img-norns-screenshot {
+    /* width: calc(var(--norns-screenshot-scale) * 128px);*/
+    height: auto;
     /* NB: we need to make multiple declaration to support all browsers... */
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
