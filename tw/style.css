@@ -39,10 +39,11 @@ h2 {
 }
 
 .script-panels-container {
-    margin: 0;
+    margin: -5px;
 }
 
 .script-panel-container {
+    padding: 5px;
     width: 100%;
 }
 
