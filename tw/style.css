@@ -35,7 +35,8 @@ h2 {
 }
 
 .script-category-section {
-    background-color: #f5f6fa;
+    background-color: #ffffff;
+    margin-bottom: 40px
 }
 
 .script-panels-container {
@@ -83,6 +84,8 @@ h2 {
 .norns-screenshot-container img {
     width: 100%;
     height: 100%;
+    min-height: 240.99px;
+    background: #000 url("https://norns.community/meta/scriptname.png") no-repeat top center;
 }   
 
 .img-norns-screenshot {
