@@ -58,7 +58,7 @@
   (let [kw-tags (map #(-> %
                           (clojure.string/replace #" " "_")
                           keyword) tags)
-        feature-kws (norns-index.conf/flattended-io-features)]
+        feature-kws (conf/flattended-io-features)]
     (set
      (filter feature-kws kw-tags))))
 
