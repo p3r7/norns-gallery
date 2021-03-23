@@ -11,6 +11,8 @@
    :arc {:values #{:arc}}
    :crow {:values #{:crow}}
    :midi {:values #{:midi_in :midi_out}}
+   :keyboard {:values #{:keyboard}}
+   :mouse {:values #{:mouse}}
    })
 
 (def ordered-filterable-io-features
@@ -81,12 +83,12 @@
    "molly_the_polly" {:types [:synth]
                       :features #{:midi_in :audio_out :grid_128}}
    "mouse" {:types [:sequencer]
-            :features #{:kbd :mouse :audio_out :midi_out}}
+            :features #{:keyboard :mouse :audio_out :midi_out}}
    "oooooo" {:types [:looper]
-              :features #{:audio_in :audio_out}}
+             :features #{:audio_in :audio_out}}
    "orca" {:types [:tracker]
-           :features #{:audio_in :audio_out :kbd :arc :crow :midi_out :grid_any}
-           :required-features #{:kbd}}
+           :features #{:audio_in :audio_out :keyboard :arc :crow :midi_out :grid_any}
+           :required-features #{:keyboard}}
    "ortf" {:types [:sample-player]
            :features #{:audio_out}}
    "passerby" {:types [:synth]
@@ -120,8 +122,8 @@
    "wrms" {:types [:looper]
            :features #{:audio_in :audio_out}}
    "yggrasil" {:types [:tracker]
-               :features #{:kbd :midi_out :audio_out}
-               :required-features #{:kbd :midi_out :audio_out}}
+               :features #{:keyboard :midi_out :audio_out}
+               :required-features #{:keyboard :midi_out :audio_out}}
    }
   )
 

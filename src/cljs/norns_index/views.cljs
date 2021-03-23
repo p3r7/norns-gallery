@@ -221,7 +221,7 @@
      :audio_out "audio_o"
      :grid_128 "grid_128"
      :grid_any "grid_any"
-     :kbd "kbd"
+     :keyboard "kbd"
      :mouse "mouse"
      :arc "arc"
      :crow "crow"}
@@ -287,7 +287,7 @@
          [grid-feature->icon-maybe
           #(simple-feature->icon-maybe :arc %1 %2)
           #(simple-feature->icon-maybe :crow %1 %2)
-          #(simple-feature->icon-maybe :kbd %1 %2)
+          #(simple-feature->icon-maybe :keyboard %1 %2)
           #(simple-feature->icon-maybe :mouse %1 %2)
           midi-feature->icon-maybe
           audio-feature->icon-maybe]))
