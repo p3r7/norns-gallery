@@ -1,0 +1,55 @@
+$white: #ffffff
+$black: #000000
+$wikiBlue: #1565c0
+$wikiGrey: #eeeeee
+
+.container-fluid
+  padding: 0
+
+h2
+  font-style: italic
+
+.script-panel
+  background: #eeeeee
+  padding: 10px
+  margin-bottom: 20px
+
+  .norns-screenshot-container
+    position: relative
+
+    img
+      display: inline-block
+      width: 100%
+
+    .img-norns-screenshot
+      z-index: 50
+
+    .img-norns-screenshot
+      position: absolute
+      top: 0
+      left: 0
+      z-index: 100
+
+  ul.norns-feature-container
+    height: 44px
+    list-style: none
+    margin: 0
+    padding: 0
+
+    li
+      float: left
+      height: 44px
+      width: 50px
+      margin-right: 5px
+      margin-bottom: 5px
+
+    li.feature-kbd,
+    li.feature-mouse
+      width: 60px
+      height: 26.4px
+
+
+.script-panel:hover
+  background: $wikiBlue
+  color: $white
+  cursor: pointer
