@@ -12,32 +12,32 @@
  filter-panel
  filter-section-io-feature
  script-panel screenshot feature
- script-category-section)
+ row)
 
 
 
 ;; VIEW: MAIN
 
 (defn main-view []
-  [:div.main-view
+  [:div.container-fluid
    ;; [filter-panel]
    (doall
-    (map script-category-section conf/script-categories-order))])
+    (map row conf/script-categories-order))])
 
 
 
 ;; VIEW: FILTER PANEL
 
 (defn filter-panel []
-  [:div.script-category-section
-   [:h2 "Filter"]
-   [:label.block
-    [:span "Name"]
-    [:input
-     {:type "text"
-      :style {:margin-left "0.5em"}
-      :on-change (fn [e]
-                   (swap! state assoc-in [:filter :txt] e.target.value))}]]
+  [:div.row
+    [:h2 "Filter"]
+    [:label.block
+     [:span "Name"]
+     [:input
+      {:type "text"
+       :style {:margin-left "0.5em"}
+       :on-change (fn [e]
+                    (swap! state assoc-in [:filter :txt] e.target.value))}]]
    [:div
     (doall
      (map
@@ -155,7 +155,7 @@
 
 ;; VIEW: SCRIPT CATEGORY
 
-(defn script-category-section [script-category]
+(defn row [script-category]
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (member? script-category (:types script-props))
@@ -165,11 +165,13 @@
                                  sort
                                  seq)]
     ^{:key (str script-category)}
-    [:div.script-category-section
-     [:h2 (get conf/script-categories script-category)]
-     [:div.flex.flex-wrap.script-panels-container
-      (doall
-       (map #(script-panel script-category %) matched-scripts))]]))
+    [:div.row
+     [:div.col-12
+      [:h2 (get conf/script-categories script-category)]
+     ]
+     (doall
+      (map #(script-panel script-category %) matched-scripts))]
+     ))
 
 
 
@@ -182,31 +184,29 @@
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
     ^{:key (str script-category "." script-name)}
-    [:div.script-panel-container
-     ;; {:style {:display (if (show-script? script-name) "block" "none")}} ;NB: this might be an optim, less diffs between React & actual DOM
+    [:div.col-md-4
      [:div.script-panel
       {:on-click (fn [e]
                    (set! (.. js/window -top -location -href) url))}
       [screenshot script-name]
-      [:div
-       [:p.script-title (clojure.string/upper-case script-name)]
-       [:p.script-description description]
-       [:div.flex.flex-wrap
+       [:h3 script-name]
+       [:p description]
+       [:ul.norns-feature-container
         (doall
          (map #(feature % script-category script-name) feature-icons))]
-       ]]]))
+       ]]))
 
 (defn screenshot [script-name]
   (let [author (get-in @state [:script-list script-name :author])]
     [:div.norns-screenshot-container
-     ;; [:img.img-norns-screenshot {:src (str "img/screenshot/" script-name ".png")}]
+     [:img.img-norns-screenshot-default {:alt " " :src (str "https://norns.community/meta/scriptname.png")}]
      [:img.img-norns-screenshot {:alt " " :src (str "https://norns.community/community/" author "/" script-name ".png")}]
      ]))
 
 (defn feature [feature-name & [script-category script-name]]
   ^{:key (str script-category "." script-name "." feature-name)}
-  [:div.norns-feature-container
-   [:img.img-norns-feature {:src (str "img/feature/" feature-name ".svg")}]])
+  [:li {:class (str "feature-" feature-name)}
+   [:img {:src (str "img/feature/" feature-name ".svg")}]])
 
 
 

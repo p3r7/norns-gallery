@@ -26,15 +26,11 @@ Changes to the code are automatically detected and hot-swapped in the running br
 
 ## Setup: CSS
 
-The project relies on [tailwindcss](https://tailwindcss.com/).
+The project relies on [Bootstrap](https://getbootstrap.com/).
 
-In addition, custom styles are defined under [tw/style.css](./tw/style.css).
+In addition, custom styles are defined under [sass/main.sass](./sass/main.sass).
 
-For changes made to this latter file to be taken into account, run:
-
-    $ npm run tw
-
-One could also run the following to enable hot-reload:
+After changes, Sass must be compiled:
 
     $ npm run watch:css
 
