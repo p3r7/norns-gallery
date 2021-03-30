@@ -167,7 +167,7 @@
     ^{:key (str script-category)}
     [:div.row
      [:div.col-12
-      [:h2 (get conf/script-categories script-category)]
+      [:h1 (get conf/script-categories script-category)]
      ]
      (doall
       (map #(script-panel script-category %) matched-scripts))]
@@ -184,7 +184,7 @@
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
     ^{:key (str script-category "." script-name)}
-    [:div.col-md-4
+    [:div.col-md-6.col-lg-4
      [:div.script-panel
       {:on-click (fn [e]
                    (set! (.. js/window -top -location -href) url))}
