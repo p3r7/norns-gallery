@@ -3,13 +3,20 @@ $black: #000000
 $wikiBlue: #1565c0
 $wikiGrey: #eeeeee
 
+*
+  text-transform: lowercase !important
+
 .container-fluid
   padding: 0
 
-h1
+h1, h2
   color: $wikiBlue
   font-style: italic
   border-bottom: 5px solid $wikiBlue
+
+h2
+  font-size: 1rem
+  border-bottom-width: 3px
 
 .script-panel
   background: #eeeeee
@@ -32,24 +39,36 @@ h1
       left: 0
       z-index: 100
 
-  ul.norns-feature-container
-    height: 24px
-    list-style: none
-    margin: 0
-    padding: 0
+ul.norns-feature-container
+  height: 24px
+  list-style: none
+  margin: 0
+  padding: 0
 
-    li
-      float: left
+  li
+    float: left
+    
+    img
       height: 24px
       width: 27px
       margin-right: 5px
       margin-bottom: 5px
 
-    li.feature-kbd,
-    li.feature-mouse
+  li.feature-kbd,
+  li.feature-mouse
+
+    img
       height: 24px
       width: 52px
 
+ul.norns-feature-legend
+  margin-bottom: 20px
+
+  li
+    margin-right: 50px
+    
+    span, img
+      float: left
 
 .script-panel:hover
   background: $wikiBlue
