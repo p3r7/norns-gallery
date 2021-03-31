@@ -11,6 +11,7 @@
  ;; sub-views
  filter-panel
  filter-section-io-feature
+ legend-panel
  script-panel screenshot feature
  row)
 
@@ -21,8 +22,48 @@
 (defn main-view []
   [:div.container-fluid
    ;; [filter-panel]
+   [legend-panel]
    (doall
     (map row conf/script-categories-order))])
+
+
+;; VIEW: LEGEND PANEL
+
+(defn legend-panel []
+  [:div.row
+    [:div.col-12
+      [:h2 "legend"]
+      [:ul.norns-feature-container.norns-feature-legend
+        ;; todo, learn how to loop
+        [:li.feature-grid
+          [:img {:src (str "img/feature/grid.svg")}]
+          [:span "grid"]
+        ]
+        [:li.feature-arc
+          [:img {:src (str "img/feature/arc.svg")}]
+          [:span "arc"]
+        ]
+        [:li.feature-crow
+          [:img {:src (str "img/feature/crow.svg")}]
+          [:span "crow"]
+        ]
+        [:li.feature-midi
+          [:img {:src (str "img/feature/midi.svg")}]
+          [:span "midi"]
+        ]
+        [:li.feature-kbd
+          [:img {:src (str "img/feature/kbd.svg")}]
+          [:span "keyboard"]
+        ]
+        [:li.feature-mouse
+          [:img {:src (str "img/feature/mouse.svg")}]
+          [:span "mouse"]
+        ]
+      ]
+    ]
+  ]
+)
+
 
 
 
