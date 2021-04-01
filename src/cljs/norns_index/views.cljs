@@ -13,6 +13,7 @@
  filter-section-io-feature
  legend-panel
  script-panel screenshot feature
+ simple-feature->icon
  row)
 
 
@@ -31,39 +32,18 @@
 
 (defn legend-panel []
   [:div.row
-    [:div.col-12
-      [:h2 "legend"]
-      [:ul.norns-feature-container.norns-feature-legend
-        ;; todo, learn how to loop
-        [:li.feature-grid
-          [:img {:src (str "img/feature/grid.svg")}]
-          [:span "grid"]
-        ]
-        [:li.feature-arc
-          [:img {:src (str "img/feature/arc.svg")}]
-          [:span "arc"]
-        ]
-        [:li.feature-crow
-          [:img {:src (str "img/feature/crow.svg")}]
-          [:span "crow"]
-        ]
-        [:li.feature-midi
-          [:img {:src (str "img/feature/midi.svg")}]
-          [:span "midi"]
-        ]
-        [:li.feature-kbd
-          [:img {:src (str "img/feature/kbd.svg")}]
-          [:span "keyboard"]
-        ]
-        [:li.feature-mouse
-          [:img {:src (str "img/feature/mouse.svg")}]
-          [:span "mouse"]
-        ]
-      ]
-    ]
-  ]
-)
-
+   [:div.col-12
+    [:h2 "legend"]
+    [:ul.norns-feature-container.norns-feature-legend
+     (doall
+      (map
+       (fn [feature]
+         ^{:key (str "legend-feature-" feature)}
+         [:li
+          {:class (str "feature-" feature)}
+          [:img {:src (str "img/feature/" (simple-feature->icon (keyword feature)) ".svg")}]
+          [:span feature]])
+       ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]])
 
 
 
@@ -71,14 +51,14 @@
 
 (defn filter-panel []
   [:div.row
-    [:h2 "Filter"]
-    [:label.block
-     [:span "Name"]
-     [:input
-      {:type "text"
-       :style {:margin-left "0.5em"}
-       :on-change (fn [e]
-                    (swap! state assoc-in [:filter :txt] e.target.value))}]]
+   [:h2 "Filter"]
+   [:label.block
+    [:span "Name"]
+    [:input
+     {:type "text"
+      :style {:margin-left "0.5em"}
+      :on-change (fn [e]
+                   (swap! state assoc-in [:filter :txt] e.target.value))}]]
    [:div
     (doall
      (map
@@ -258,10 +238,13 @@
    (get
     {:midi_in "midi_i"
      :midi_out "midi_o"
+     :midi "midi"
      :audio_in "audio_i"
      :audio_out "audio_o"
+     :audio "audio"
      :grid_128 "grid_128"
      :grid_any "grid_any"
+     :grid "grid"
      :keyboard "kbd"
      :mouse "mouse"
      :arc "arc"
@@ -287,7 +270,7 @@
 
     ;; NB: unspecified fallback is current implem
     (member? :midi features)
-    "midi"))
+    (simple-feature->icon :midi)))
 
 (defn audio-feature->icon-maybe [features required-features]
   (cond
@@ -302,7 +285,7 @@
 
     ;; NB: unspecified fallback is current implem
     (member? :audio features)
-    "audio"))
+    (simple-feature->icon :audio)))
 
 (defn grid-feature->icon-maybe [features required-features]
   (let [is-required (when required-features
@@ -319,7 +302,7 @@
 
       ;; NB: unspecified fallback is current implem
       (member? :grid features)
-      "grid")))
+      (simple-feature->icon :grid is-required))))
 
 (defn norns-script-features->icons [features required-features]
   (->
