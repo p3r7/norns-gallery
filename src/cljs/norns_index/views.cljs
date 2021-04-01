@@ -9,10 +9,12 @@
 (declare
  norns-script-features->icons
  ;; sub-views
+ featured-script
  filter-panel
  filter-section-io-feature
  legend-panel
- script-panel screenshot feature
+ script-panel featured-script-panel
+ screenshot feature
  simple-feature->icon
  row)
 
@@ -24,6 +26,7 @@
   [:div.container-fluid
    ;; [filter-panel]
    [legend-panel]
+   [featured-script]
    (doall
     (map row conf/script-categories-order))])
 
@@ -175,6 +178,16 @@
 
 
 
+;; VIEW: (RANDOM) FEATURED SCRIPT
+
+(defn featured-script []
+  (when-let [random-script-name (rand-nth (keys (:script-list @state)))]
+    [:div.row
+     [:div.col-12
+      [:h1 "featured"]]
+     [featured-script-panel random-script-name]]))
+
+
 ;; VIEW: SCRIPT CATEGORY
 
 (defn row [script-category]
@@ -190,10 +203,10 @@
     [:div.row
      [:div.col-12
       [:h1 (get conf/script-categories script-category)]
-     ]
+      ]
      (doall
       (map #(script-panel script-category %) matched-scripts))]
-     ))
+    ))
 
 
 
@@ -211,12 +224,32 @@
       {:on-click (fn [e]
                    (set! (.. js/window -top -location -href) url))}
       [screenshot script-name]
-       [:h3 script-name]
-       [:p description]
-       [:ul.norns-feature-container
-        (doall
-         (map #(feature % script-category script-name) feature-icons))]
-       ]]))
+      [:h3 script-name]
+      [:p description]
+      [:ul.norns-feature-container
+       (doall
+        (map #(feature % script-category script-name) feature-icons))]
+      ]]))
+
+(defn featured-script-panel [script-name]
+  (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
+        description (get-in @state [:script-list script-name :description])
+        author (get-in @state [:script-list script-name :author])
+        author-url (str "https://norns.community/en/authors/" author)
+        features (get-in @state [:script-list script-name :features])
+        required-features (get-in @state [:script-list script-name :required-features])
+        feature-icons (norns-script-features->icons features required-features)]
+    [:div.col-md-6.col-lg-4
+     [:div.script-panel
+      {:on-click (fn [e]
+                   (set! (.. js/window -top -location -href) url))}
+      [screenshot script-name]
+      [:h3 script-name]
+      [:p description]
+      [:ul.norns-feature-container
+       (doall
+        (map #(feature % "featured" script-name) feature-icons))]
+      [:a {:href author-url} author]]]))
 
 (defn screenshot [script-name]
   (let [author (get-in @state [:script-list script-name :author])]
