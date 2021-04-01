@@ -38,11 +38,12 @@
      (doall
       (map
        (fn [feature]
-         ^{:key (str "legend-feature-" feature)}
-         [:li
-          {:class (str "feature-" feature)}
-          [:img {:src (str "img/feature/" (simple-feature->icon (keyword feature)) ".svg")}]
-          [:span feature]])
+         (let [icon (simple-feature->icon (keyword feature))]
+           ^{:key (str "legend-feature-" feature)}
+           [:li
+            {:class (str "feature-" icon)}
+            [:img {:src (str "img/feature/" icon ".svg")}]
+            [:span feature]]))
        ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]])
 
 
