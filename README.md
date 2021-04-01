@@ -30,7 +30,13 @@ The project relies on [Bootstrap](https://getbootstrap.com/).
 
 In addition, custom styles are defined under [sass/main.sass](./sass/main.sass).
 
+To be compiled, it needs a SASS compiler.
+
 After changes, Sass must be compiled:
+
+    $ sass sass/main.sass:resources/public/css/main.css
+
+Alternatively, to auto-compile on source change:
 
     $ npm run watch:css
 
