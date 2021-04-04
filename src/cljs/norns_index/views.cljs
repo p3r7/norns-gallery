@@ -1,7 +1,6 @@
 (ns norns-index.views
   (:require
    [norns-index.utils.core :refer [member? remove-nils]]
-
    [norns-index.state :refer [state show-script?]]
    [norns-index.conf :as conf]))
 
@@ -9,11 +8,11 @@
 (declare
  norns-script-features->icons
  ;; sub-views
- featured-script
+ discover-script
  filter-panel
  filter-section-io-feature
- legend-panel
- script-panel featured-script-panel
+ io-panel
+ gallery-panel discover-gallery-panel
  screenshot feature
  simple-feature->icon
  row)
@@ -24,168 +23,45 @@
 
 (defn main-view []
   [:div.container-fluid
-   ;; [filter-panel]
-   [legend-panel]
-   [featured-script]
-   (doall
-    (map row conf/script-categories-order))])
+   ;; [io-panel]
+   [discover-script]])
+   ;; (doall
+   ;; (map row conf/script-categories-order))])
 
 
-;; VIEW: LEGEND PANEL
+;; VIEW: I/O LEGEND
 
-(defn legend-panel []
+(defn io-panel []
   [:div.row
    [:div.col-12
-    [:h2 "legend"]
-    [:ul.norns-feature-container.norns-feature-legend
-     (doall
-      (map
-       (fn [feature]
-         (let [icon (simple-feature->icon (keyword feature))]
-           ^{:key (str "legend-feature-" feature)}
-           [:li
-            {:class (str "feature-" icon)}
-            [:img {:src (str "img/feature/" icon ".svg")}]
-            [:span feature]]))
-       ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]])
-
-
-
-;; VIEW: FILTER PANEL
-
-(defn filter-panel []
-  [:div.row
-   [:h2 "Filter"]
-   [:label.block
-    [:span "Name"]
-    [:input
-     {:type "text"
-      :style {:margin-left "0.5em"}
-      :on-change (fn [e]
-                   (swap! state assoc-in [:filter :txt] e.target.value))}]]
-   [:div
-    (doall
-     (map
-      filter-section-io-feature
-      conf/ordered-filterable-io-features))]])
-
-(defn filter-section-io-feature [feature]
-  (let [feature-def (get conf/io-features feature)
-
-        feature-std-vals (:values feature-def)
-        feature-catch-all-val (:catch-all-value feature-def)
-        feature-all-default-vals (if feature-catch-all-val
-                                   (conj feature-std-vals feature-catch-all-val)
-                                   feature-std-vals)
-
-        is-requirable (:is-required feature-def)
-
-        on-change-visibility-fn (fn [e]
-                                  (swap! state assoc-in [:filter :io feature :display] (keyword e.target.value)))
-        on-change-value-fn (fn [e]
-                             (.stopPropagation e)
-                             (if e.target.checked
-                               (swap! state update-in [:filter :io feature :values] conj (keyword e.target.value))
-                               (swap! state update-in [:filter :io feature :values] disj (keyword e.target.value))))]
-    ^{:key (str "filter-section-io-" (name feature))}
-    [:div
-     [:table
-      [:thead
-       [:tr
-        [:th {:colSpan 3}
-         (name feature)]]]
-      [:tbody
-       ;; REVIEW: filter in/out/only, or only/exclude
-       [:tr
-        [:td
-         {:colSpan 3}
-         [:div.switch-toggle.switch-3.switch-candy
-
-          [:input.switch-filter-out
-           {:type "radio"
-            :id (str "radio-" (name feature) "-no")
-            :name (str "radio-" (name feature))
-            :value "no"
-            :style {:margin-left "0.5em"}
-            :on-change on-change-visibility-fn
-            :checked (= :no (get-in @state [:filter :io feature :display]))
-            }]
-          [:label.noselect
-           {:for (str "radio-" (name feature) "-no")}
-           "without"]
-
-          [:input.switch-neutral
-           {:type "radio"
-            :id (str "radio-" (name feature) "-optional")
-            :name (str "radio-" (name feature))
-            :value "optional"
-            :style {:margin-left "0.5em"}
-            :on-change on-change-visibility-fn
-            :checked (= :optional (get-in @state [:filter :io feature :display]))
-            }]
-          [:label.noselect
-           {:for (str "radio-" (name feature) "-optional")}
-           "n/a"]
-
-          [:input.switch-filter-in
-           {:type "radio"
-            :id (str "radio-" (name feature) "-only")
-            :name (str "radio-" (name feature))
-            :value "only"
-            :style {:margin-left "0.5em"}
-            :on-change on-change-visibility-fn
-            :checked (= :only (get-in @state [:filter :io feature :display]))
-            }]
-          [:label.noselect
-           {:for (str "radio-" (name feature) "-only")}
-           "only"]
-
-          (when is-requirable
-            [:span
-             [:input.switch-filter-in-required
-              {:type "radio"
-               :id (str "radio-" (name feature) "-required")
-               :name (str "radio-" (name feature))
-               :value "required"
-               :style {:margin-left "0.5em"}
-               :on-change on-change-visibility-fn
-               :checked (= :required (get-in @state [:filter :io feature :display]))
-               }]
-             [:label.noselect
-              {:for (str "radio-" (name feature) "-required")}
-              "only-required"]])
-
-          ]]]
-       [:tr
-        (when (> (count feature-all-default-vals) 1)
-          (doall
-           (map
-            (fn [feature-v]
-              (let [label (clojure.string/replace-first (name feature-v) (str (name feature) "_") "")]
-                ^{:key (str "filter-block-" (name feature-v))}
-                [:td [:label.block
-                      [:input
-                       {:type "checkbox"
-                        :name (str "checkbox-" (name feature) "-value")
-                        :value (name feature-v)
-                        :style {:margin-left "0.5em"}
-                        :on-change on-change-value-fn
-                        :defaultChecked true}]
-                      [:span
-                       {:style {:margin-left "0.5em"}}
-                       label]]]))
-            feature-all-default-vals)))]]]]))
+    [:div.gallery-panel.container-fluid
+      [:h2 "i/o icons"]
+      [:ul.norns-feature-container.norns-feature-io.row
+       (doall
+        (map
+         (fn [feature]
+           (let [icon (simple-feature->icon (keyword feature))]
+             ^{:key (str "io-feature-" feature)}
+             [:li
+              {:class (str "col-3 p-0 feature-" icon)}
+              [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
+              [:p feature]]))
+         ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]]])
 
 
 
 ;; VIEW: (RANDOM) FEATURED SCRIPT
 
-(defn featured-script []
+(defn discover-script []
   (when-let [random-script-name (rand-nth (keys (:script-list @state)))]
     [:div.row
-     [:div.col-12
-      [:h1 "featured"]]
-     [featured-script-panel random-script-name]]))
+      ;; [:div.col-12
+      ;; [:h1 "discover"]]
+      ;; todo: (take 4 (shuffle coll))
+      [discover-gallery-panel random-script-name]
+      [discover-gallery-panel random-script-name]
+      [discover-gallery-panel random-script-name]
+      [discover-gallery-panel random-script-name]]))
 
 
 ;; VIEW: SCRIPT CATEGORY
@@ -205,14 +81,14 @@
       [:h1 (get conf/script-categories script-category)]
       ]
      (doall
-      (map #(script-panel script-category %) matched-scripts))]
+      (map #(gallery-panel script-category %) matched-scripts))]
     ))
 
 
 
 ;; VIEWS: SCRIPT PANEL
 
-(defn script-panel [script-category script-name]
+(defn gallery-panel [script-category script-name]
   (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
         description (get-in @state [:script-list script-name :description])
         features (get-in @state [:script-list script-name :features])
@@ -220,7 +96,7 @@
         feature-icons (norns-script-features->icons features required-features)]
     ^{:key (str script-category "." script-name)}
     [:div.col-md-6.col-lg-4
-     [:div.script-panel
+     [:div.gallery-panel
       {:on-click (fn [e]
                    (set! (.. js/window -top -location -href) url))}
       [screenshot script-name]
@@ -231,7 +107,7 @@
         (map #(feature % script-category script-name) feature-icons))]
       ]]))
 
-(defn featured-script-panel [script-name]
+(defn discover-gallery-panel [script-name]
   (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
         description (get-in @state [:script-list script-name :description])
         author (get-in @state [:script-list script-name :author])
@@ -240,16 +116,19 @@
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
     [:div.col-md-6.col-lg-4
-     [:div.script-panel
+     [:div.gallery-panel.container-fluid
       {:on-click (fn [e]
                    (set! (.. js/window -top -location -href) url))}
-      [screenshot script-name]
-      [:h3 script-name]
-      [:p description]
-      [:ul.norns-feature-container
-       (doall
-        (map #(feature % "featured" script-name) feature-icons))]
-      [:a {:href author-url} author]]]))
+      [:div.row
+        [:div.col-6
+          [screenshot script-name]
+          [:ul.norns-feature-container
+           (doall
+            (map #(feature % "discover" script-name) feature-icons))]]
+        [:div.col-6
+          [:h3 script-name]
+          [:p "by " [:a {:href author-url} (str "@" author)]]
+          [:p description]]]]]))
 
 (defn screenshot [script-name]
   (let [author (get-in @state [:script-list script-name :author])]

@@ -1,7 +1,8 @@
 $white: #ffffff
 $black: #000000
 $wikiBlue: #1565c0
-$wikiGrey: #eeeeee
+$wikiDarkGrey: #424242
+$wikiLightGrey: #eeeeee
 
 *
   text-transform: lowercase !important
@@ -9,17 +10,18 @@ $wikiGrey: #eeeeee
 .container-fluid
   padding: 0
 
-h1, h2
-  color: $wikiBlue
+h1
+  color: $wikiDarkGrey
   font-style: italic
-  border-bottom: 5px solid $wikiBlue
+  border-bottom: 5px solid $wikiDarkGrey
 
 h2
+  color: $wikiDarkGrey
   font-size: 1rem
-  border-bottom-width: 3px
+  border-bottom: 1px solid $wikiDarkGrey
 
-.script-panel
-  background: #eeeeee
+.gallery-panel
+  background: $wikiLightGrey
   padding: 10px
   margin-bottom: 20px
 
@@ -42,7 +44,7 @@ h2
 ul.norns-feature-container
   height: 24px
   list-style: none
-  margin: 0
+  margin: 5px 0 0 0
   padding: 0
 
   li
@@ -61,16 +63,13 @@ ul.norns-feature-container
       height: 24px
       width: 52px
 
-ul.norns-feature-legend
-  margin-bottom: 20px
+ul.norns-feature-io
+  height: auto
 
-  li
-    margin-right: 50px
-
-    span, img
-      float: left
-
-.script-panel:hover
+.gallery-panel:hover
   background: $wikiBlue
   color: $white
   cursor: pointer
+  
+  a
+    color: $white
