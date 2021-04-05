@@ -122,7 +122,7 @@
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
       ^{:key (str script-name)}
-    [:div.col-md-6.col-lg-4
+    [:div.col-md-6.col-lg-6.col-sm-12
      [:div.gallery-panel.container-fluid
       {:on-click (fn [e]
                    (set! (.. js/window -top -location -href) url))}
