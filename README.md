@@ -1,6 +1,13 @@
 # norns-index
 
 
+## Implentation Notes
+
+- http://localhost:8666
+- http://localhost:8666/?random=4
+- http://localhost:8666/?category=art
+- http://localhost:8666/?author=infinitedigits
+
 ## Setup: ClojureScript / Javascript
 
 This code is written in [ClojureScript](https://clojurescript.org/) that gets transpileld into Javascript.
