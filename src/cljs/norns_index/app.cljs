@@ -5,6 +5,9 @@
    [goog.dom :as gdom]
    [norns-index.utils.core :refer [member? remove-nils]]
 
+   ;; window/dom
+   [cemerick.url :as url]
+
    ;; react
    [reagent.core :as r]
    [reagent.dom :as rdom]
@@ -43,9 +46,25 @@
   "Mount transpilled js code into #app dome element.
   Gets called both at page load (`init`) and on automatic code reload by shadow-cljs (`on-reload`)."
   []
-  (mount-app-element [views/main-view])
 
-  (dynamic-conf/get-from-wiki-js)       ; NB: gets stored in `norns-index.state/state`
+  (let [query-params (:query (url/url (-> js/window .-location .-href)))
+        random (get query-params "random")
+        category (get query-params "category")
+        author (get query-params "author")]
+    (cond
+      random
+      (mount-app-element [views/main-view-discover (edn/read-string random)])
+
+      category
+      (mount-app-element [views/main-view-single-category category])
+
+      author
+      (mount-app-element [views/main-view-single-author author])
+
+      :else
+      (mount-app-element [views/main-view])))
+
+  (dynamic-conf/get-from-wiki-js) ; NB: gets stored in `norns-index.state/state`
   )
 
 
