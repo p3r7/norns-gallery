@@ -24,7 +24,8 @@
                  ;; [re-frame "0.12.0"]
                  ;; [day8.re-frame/http-fx "0.2.1"]
                  ;; [re-com "2.9.0"]
-                 [cljs-http "0.1.46"]]
+                 [cljs-http "0.1.46"]
+                 [com.cemerick/url "0.1.1"]]
 
   :plugins   [
               [refactor-nrepl "2.5.1"]

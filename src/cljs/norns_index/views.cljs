@@ -8,25 +8,37 @@
 (declare
  norns-script-features->icons
  ;; sub-views
- discover-script
+ discover-scripts
  filter-panel
  filter-section-io-feature
  io-panel
  gallery-panel discover-gallery-panel
  screenshot feature
  simple-feature->icon
- row)
+ row row-by-author)
 
 
 
-;; VIEW: MAIN
+;; VIEW: MAINS
 
 (defn main-view []
   [:div.container-fluid
-   ;; [io-panel]
-   [discover-script]])
-   ;; (doall
-   ;; (map row conf/script-categories-order))])
+   [io-panel]
+   (doall
+    (map row conf/script-categories-order))])
+
+(defn main-view-single-category [category-name]
+  [:div.container-fluid
+   [row category-name]])
+
+(defn main-view-single-author [author]
+  [:div.container-fluid
+   [row-by-author author]])
+
+(defn main-view-discover [nb]
+  [:div.container-fluid
+   [discover-scripts nb]])
+
 
 
 ;; VIEW: I/O LEGEND
@@ -35,25 +47,25 @@
   [:div.row
    [:div.col-12
     [:div.gallery-panel.container-fluid
-      [:h2 "i/o icons"]
-      [:ul.norns-feature-container.norns-feature-io.row
-       (doall
-        (map
-         (fn [feature]
-           (let [icon (simple-feature->icon (keyword feature))]
-             ^{:key (str "io-feature-" feature)}
-             [:li
-              {:class (str "col-3 p-0 feature-" icon)}
-              [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
-              [:p feature]]))
-         ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]]])
+     [:h2 "i/o icons"]
+     [:ul.norns-feature-container.norns-feature-io.row
+      (doall
+       (map
+        (fn [feature]
+          (let [icon (simple-feature->icon (keyword feature))]
+            ^{:key (str "io-feature-" feature)}
+            [:li
+             {:class (str "col-3 p-0 feature-" icon)}
+             [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
+             [:p feature]]))
+        ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]]])
 
 
 
 ;; VIEW: (RANDOM) FEATURED SCRIPT
 
-(defn discover-script []
-  (when-let [random-script-names (take 4 (shuffle (keys (:script-list @state))))]
+(defn discover-scripts [nb]
+  (when-let [random-script-names (take nb (shuffle (keys (:script-list @state))))]
     [:div.row
      ;; [:div.col-12
      ;; [:h1 "discover"]]
@@ -84,6 +96,28 @@
       ]
      (doall
       (map #(gallery-panel script-category %) matched-scripts))]
+    ))
+
+
+
+;; VIEW: SCRIPT AUTHOR
+
+(defn row-by-author [author]
+  (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
+                                           (and
+                                            (= author (:author script-props))
+                                            (show-script? script-name)
+                                            )) (:script-list @state))
+                                 keys
+                                 sort
+                                 seq)]
+    ^{:key (str author)}
+    [:div.row
+     [:div.col-12
+      [:h1 author]
+      ]
+     (doall
+      (map #(gallery-panel author %) matched-scripts))]
     ))
 
 
