@@ -53,7 +53,7 @@
         author (get query-params "author")]
     (cond
       random
-      (mount-app-element [views/main-view-discover (edn/read-string random)])
+      (mount-app-element [views/main-view-random (edn/read-string random)])
 
       category
       (mount-app-element [views/main-view-single-category category])

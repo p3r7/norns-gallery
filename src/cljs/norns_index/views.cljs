@@ -4,19 +4,18 @@
    [norns-index.state :refer [state show-script?]]
    [norns-index.conf :as conf]))
 
-
 (declare
  norns-script-features->icons
  ;; sub-views
- discover-scripts
+ random-scripts
  filter-panel
  filter-section-io-feature
  io-panel
- gallery-panel discover-gallery-panel
- screenshot feature
+ gallery-panel
+ screenshot
+ feature
  simple-feature->icon
  row row-by-author)
-
 
 
 ;; VIEW: MAINS
@@ -35,45 +34,42 @@
   [:div.container-fluid
    [row-by-author author]])
 
-(defn main-view-discover [nb]
+(defn main-view-random [nb]
   [:div.container-fluid
-   [discover-scripts nb]])
-
+   [random-scripts nb]])
 
 
 ;; VIEW: I/O LEGEND
 
 (defn io-panel []
   [:div.row
-   [:div.col-12
-    [:div.gallery-panel.container-fluid
-     [:h2 "i/o icons"]
-     [:ul.norns-feature-container.norns-feature-io.row
-      (doall
-       (map
-        (fn [feature]
-          (let [icon (simple-feature->icon (keyword feature))]
-            ^{:key (str "io-feature-" feature)}
-            [:li
-             {:class (str "col-3 p-0 feature-" icon)}
-             [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
-             [:p feature]]))
-        ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]]])
+    [:div.col-12
+      [:div.gallery-panel.container-fluid
+        [:h2 "i/o icons"]
+          [:ul.norns-feature-container.norns-feature-io.row
+            (doall
+              (map
+                (fn [feature]
+                  (let [icon (simple-feature->icon (keyword feature))]
+                    ^{:key (str "io-feature-" feature)}
+                    [:li
+                      {:class (str "col-3 p-0 feature-" icon)}
+                      [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
+                      [:p feature]]))
+  ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]]])
 
 
 
 ;; VIEW: (RANDOM) FEATURED SCRIPT
 
-(defn discover-scripts [nb]
+(defn random-scripts [nb]
   (when-let [random-script-names (take nb (shuffle (keys (:script-list @state))))]
     [:div.row
-     ;; [:div.col-12
-     ;; [:h1 "discover"]]
-     (doall
-      (map
-       (fn [script-name]
-         ^{:key (str "discover-" script-name)}
-         [discover-gallery-panel script-name])
+      (doall
+        (map
+         (fn [script-name]
+           ^{:key (str "random-" script-name)}
+           [gallery-panel script-name])
        random-script-names))]))
 
 
@@ -91,11 +87,8 @@
                                  seq)]
     ^{:key (str script-category)}
     [:div.row
-     [:div.col-12
-      [:h1 (get conf/script-categories script-category)]
-      ]
      (doall
-      (map #(gallery-panel script-category %) matched-scripts))]
+      (map #(gallery-panel %) matched-scripts))]
     ))
 
 
@@ -113,37 +106,14 @@
                                  seq)]
     ^{:key (str author)}
     [:div.row
-     [:div.col-12
-      [:h1 author]
-      ]
      (doall
-      (map #(gallery-panel author %) matched-scripts))]
+      (map #(gallery-panel %) matched-scripts))]
     ))
-
 
 
 ;; VIEWS: SCRIPT PANEL
 
-(defn gallery-panel [script-category script-name]
-  (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
-        description (get-in @state [:script-list script-name :description])
-        features (get-in @state [:script-list script-name :features])
-        required-features (get-in @state [:script-list script-name :required-features])
-        feature-icons (norns-script-features->icons features required-features)]
-    ^{:key (str script-category "." script-name)}
-    [:div.col-md-6.col-lg-4
-     [:div.gallery-panel
-      {:on-click (fn [e]
-                   (set! (.. js/window -top -location -href) url))}
-      [screenshot script-name]
-      [:h3 script-name]
-      [:p description]
-      [:ul.norns-feature-container
-       (doall
-        (map #(feature % script-category script-name) feature-icons))]
-      ]]))
-
-(defn discover-gallery-panel [script-name]
+(defn gallery-panel [script-name]
   (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
         description (get-in @state [:script-list script-name :description])
         author (get-in @state [:script-list script-name :author])
@@ -151,6 +121,7 @@
         features (get-in @state [:script-list script-name :features])
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
+      ^{:key (str script-name)}
     [:div.col-md-6.col-lg-4
      [:div.gallery-panel.container-fluid
       {:on-click (fn [e]
@@ -160,7 +131,7 @@
           [screenshot script-name]
           [:ul.norns-feature-container
            (doall
-            (map #(feature % "discover" script-name) feature-icons))]]
+            (map #(feature % "random" script-name) feature-icons))]]
         [:div.col-6
           [:h3 script-name]
           [:p "by " [:a {:href author-url} (str "@" author)]]
