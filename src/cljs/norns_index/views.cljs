@@ -53,15 +53,17 @@
 ;; VIEW: (RANDOM) FEATURED SCRIPT
 
 (defn discover-script []
-  (when-let [random-script-name (rand-nth (keys (:script-list @state)))]
+  (when-let [random-script-names (take 4 (shuffle (keys (:script-list @state))))]
     [:div.row
-      ;; [:div.col-12
-      ;; [:h1 "discover"]]
-      ;; todo: (take 4 (shuffle coll))
-      [discover-gallery-panel random-script-name]
-      [discover-gallery-panel random-script-name]
-      [discover-gallery-panel random-script-name]
-      [discover-gallery-panel random-script-name]]))
+     ;; [:div.col-12
+     ;; [:h1 "discover"]]
+     (doall
+      (map
+       (fn [script-name]
+         ^{:key (str "discover-" script-name)}
+         [discover-gallery-panel script-name])
+       random-script-names))]))
+
 
 
 ;; VIEW: SCRIPT CATEGORY
