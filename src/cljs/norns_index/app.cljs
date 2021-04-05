@@ -17,7 +17,6 @@
 
    ;; app
    [norns-index.views :as views]
-   ["iframe-resizer" :as iframe-resizer]
    ))
 
 

@@ -4,7 +4,6 @@
     },
     "dependencies": {
         "create-react-class": "^15.7.0",
-        "iframe-resizer": "^4.3.1",
         "onchange": "7.0.2",
         "react": "^16.13.0",
         "react-dom": "^16.13.0"
