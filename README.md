@@ -8,6 +8,7 @@
 - http://localhost:8666/?category=art
 - http://localhost:8666/?author=infinitedigits
 
+
 ## Setup: ClojureScript / Javascript
 
 This code is written in [ClojureScript](https://clojurescript.org/) that gets transpileld into Javascript.
@@ -48,3 +49,17 @@ Alternatively, to auto-compile on source change:
     $ npm run watch:css
 
 All the HTML is generated from (functional) react components in [norns-index.views](./src/cljs/norns_index/views.cljs) written using the [hiccup](https://github.com/weavejester/hiccup) syntax (akin to JSX for Clojure(Script)).
+
+
+## Deploying
+
+Re compile everything w/ PROD target:
+
+    $ sass sass/main.sass:resources/public/css/main.css
+    $ lein prod
+
+Copy content of `resources/public/` folder to a local clone of [norns-gallery-render](https://github.com/p3r7/norns-gallery-render).
+
+Commit and push.
+
+The published website is available at: https://p3r7.github.io/norns-gallery-render/
