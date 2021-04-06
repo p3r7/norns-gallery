@@ -18,10 +18,12 @@
 
 ;; WIKI.JS API
 
-(defn get-from-wiki-js []
+(defn get-from-wiki-js [& {:keys [tag]}]
   (go
     (let [url "https://norns.community/graphql"
-          q "{pages { list { path, tags, description } } }"
+          filter (when tag
+                   (str "(tags: \"" tag "\")"))
+          q (str "{pages { list" filter " { path, tags, description } } }")
           response (<! (http/get url
                                  {:with-credentials? false
                                   ;; :headers {"Authorization" (str "Bearer " bearer-token)}
