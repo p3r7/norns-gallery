@@ -63,7 +63,7 @@
       (mount-app-element [views/main-view-single-author author])
 
       :else
-      (mount-app-element [views/main-view])))
+      (mount-app-element [views/main-view-all])))
 
   (dynamic-conf/get-from-wiki-js) ; NB: gets stored in `norns-index.state/state`
   )

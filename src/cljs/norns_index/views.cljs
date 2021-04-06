@@ -15,20 +15,20 @@
  screenshot
  feature
  simple-feature->icon
- row row-by-author)
+ row-by-category row-by-author)
 
 
 ;; VIEW: MAINS
 
-(defn main-view []
+(defn main-view-all []
   [:div.container-fluid
    [io-panel]
    (doall
-    (map row conf/script-categories-order))])
+    (map #(row-by-category % :show-header true) conf/script-categories-order))])
 
 (defn main-view-single-category [category-name]
   [:div.container-fluid
-   [row category-name]])
+   [row-by-category category-name]])
 
 (defn main-view-single-author [author]
   [:div.container-fluid
@@ -76,7 +76,7 @@
 
 ;; VIEW: SCRIPT CATEGORY
 
-(defn row [script-category]
+(defn row-by-category [script-category & {:keys [show-header]}]
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (member? script-category (:types script-props))
@@ -87,9 +87,11 @@
                                  seq)]
     ^{:key (str script-category)}
     [:div.row
+     (when show-header
+       [:div.col-12
+        [:h1 (get conf/script-categories script-category)]])
      (doall
-      (map #(gallery-panel %) matched-scripts))]
-    ))
+      (map #(gallery-panel %) matched-scripts))]))
 
 
 
@@ -107,8 +109,7 @@
     ^{:key (str author)}
     [:div.row
      (doall
-      (map #(gallery-panel %) matched-scripts))]
-    ))
+      (map #(gallery-panel %) matched-scripts))]))
 
 
 ;; VIEWS: SCRIPT PANEL
