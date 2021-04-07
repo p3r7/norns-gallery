@@ -1,6 +1,5 @@
 (ns norns-index.conf)
 
-
 
 ;; CONF: SCRIPT I/O FEATURES
 
@@ -35,131 +34,13 @@
         all-vs))
     io-features)))
 
-
-
-;; CONF: SCRIPT INVENTORY
-
-(def script-list
-  {"awake" {:types [:sequencer]
-            :features #{:audio_out :midi_out :grid_128}
-            :required-features #{:grid}}
-   "barcode" {:types [:looper]
-              :features #{:audio_in :audio_out}}
-   "changes" {:types [:cc]
-              :features #{:midi_out}}
-   "cranes" {:types [:looper]
-             :features #{:audio_in :audio_out :grid_128}}
-   ;; "downtown" {:types [:looper]}
-   "drift" {:types [:sequencer]
-            :features #{:audio_out :midi_out}}
-   "drum_room" {:types [:sample-player]
-                :features #{:audio_out :midi_in}
-                :required-features #{:midi_in}}
-   "euclydigons" {:types [:sequencer]
-                  :features #{:audio_out :midi_out}}
-   "flora" {:types [:sequencer]
-            :features #{:audio_out :midi_out}}
-   "fretwork" {:types [:sequencer]
-               :features #{:audio_out :midi_out :grid_128}}
-   "greyhole" {:types [:audio-effect]
-               :features #{:audio_in :audio_out}}
-   "gridstep" {:types [:sequencer]
-               :features #{:audio_out :midi_out :grid_64 :grid_128}
-               :required-features #{:grid}}
-   "hachi" {:types [:synth]
-            :features #{:audio_out}}
-   "lissadron" {:types [:synth]
-                :features #{:audio_out :midi_in}
-                :encouraged-features #{:midi_in}}
-   "loom" {:types [:sequencer]
-           :features #{:grid_any :audio_out :midi_out}
-           :required-features #{:grid}}
-   "lost_futures" {:types [:synth]
-                   :features #{:midi_in :audio_out}
-                   :required-features #{:midi_in}}
-   "mlr" {:types [:looper]
-          :features #{:audio_in :audio_out :grid_128}
-          :required-features #{:grid}}
-   "molly_the_polly" {:types [:synth]
-                      :features #{:midi_in :audio_out :grid_128}}
-   "mouse" {:types [:sequencer]
-            :features #{:keyboard :mouse :audio_out :midi_out}}
-   "oooooo" {:types [:looper]
-             :features #{:audio_in :audio_out}}
-   "orca" {:types [:tracker]
-           :features #{:audio_in :audio_out :keyboard :arc :crow :midi_out :grid_any}
-           :required-features #{:keyboard}}
-   "ortf" {:types [:sample-player]
-           :features #{:audio_out}}
-   "passerby" {:types [:synth]
-               :features #{:audio_out :midi_in :grid_128}}
-   "pedalboard" {:types [:audio-effect]
-                 :features #{:audio_in :audio_out}}
-   "reels" {:types [:looper]
-            :features #{:audio_in :audio_out}}
-   "rpmate" {:types [:util]
-             :features #{:audio_in :audio_out}}
-   "rudiments" {:types [:synth]
-                :features #{:grid_128 :audio_out}
-                :encouraged-features #{:grid}}
-   "sam" {:types [:sampler]
-          :features #{:audio_in :audio_out}}
-   "sines" {:types [:synth]
-            :features #{:midi_in :audio_out}}
-   "step" {:types [:sequencer]
-           :features #{:grid_128 :audio_out}
-           :required-features #{:grid}}
-   "takt" {:types [:sequencer]
-           :features #{:grid_128 :audio_out}
-           :required-features #{:grid}}
-   "timber_player" {:types [:sample-player]
-                    :features #{:grid_128 :midi_in :audio_out}}
-   "timeparty" {:types [:audio-effect]
-                :features #{:audio_in :audio_out :grid}
-                :required-features #{:grid}}
-   "uvf" {:types [:sample-player]
-          :features #{:audio_out}}
-   "wrms" {:types [:looper]
-           :features #{:audio_in :audio_out}}
-   "yggrasil" {:types [:tracker]
-               :features #{:keyboard :midi_out :audio_out}
-               :required-features #{:keyboard :midi_out :audio_out}}
-   }
-  )
-
-;; (def script-categories
-;;   {:synth "Synths & Drones"
-;;    :granular "Granular Processing"
-;;    :sample-player "Sample Players"
-;;    :sampler "Basic Samplers"
-;;    :sequencer "Sequencers"
-;;    :tracker "Trackers"
-;;    :cc "Control Modulation Sources"
-;;    :audio-effect "Audio Effets"
-;;    :looper "Loopers, Live Samplers & Crazy Delays"
-;;    :midi-effect "Midi Effets"
-;;    :util "Utilities"
-;;    })
-
-;; (def script-categories-order
-;;   [:synth
-;;    :granular
-;;    :sample-player
-;;    :sampler
-;;    :sequencer
-;;    :tracker
-;;    :cc
-;;    :audio-effect
-;;    :looper
-;;    :midi-effect
-;;    :util])
-
 (def script-categories
   {"art" "art"
    "audio fx" "audio fx"
+   "delays + loopers" "delays + loopers"
    "drums" "drums"
    "granulators" "granulators"
-   "loopers + live samplers" "loopers + live samplers"
+   "samplers" "samplers"
    "sequencers" "sequencers"
    "synths" "synths"
    "utilities" "utilities"
@@ -168,9 +49,10 @@
 (def script-categories-order
   ["art"
    "audio fx"
+   "delays + loopers"
    "drums"
    "granulators"
-   "loopers + live samplers"
+   "samplers"
    "sequencers"
    "synths"
    "utilities"
