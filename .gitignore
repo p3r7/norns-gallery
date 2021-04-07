@@ -32,3 +32,4 @@ package-lock.json
 .hgignore
 .hg/
 .sass-cache
+.DS_Store
