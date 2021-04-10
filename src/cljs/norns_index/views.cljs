@@ -122,24 +122,23 @@
         features (get-in @state [:script-list script-name :features])
         required-features (get-in @state [:script-list script-name :required-features])
         feature-icons (norns-script-features->icons features required-features)]
-      ^{:key (str script-name)}
+    ^{:key (str script-name)}
     [:div.col-md-6.col-lg-6.col-sm-12
-      [:a {:href url}
-        [:div.gallery-panel.container-fluid
-          {:on-click (fn [e]
-            (if (or e.ctrlKey e.metaKey)
-              (js/window.open url "_blank")
-              (set! (.. js/window -top -location -href) url)))}
-          [:div.row
-            [:div.col-6
-              [screenshot script-name]
-              [:ul.norns-feature-container
-               (doall
-                (map #(feature % "random" script-name) feature-icons))]]
-            [:div.col-6
-              [:h3 script-name]
-              [:p "by " [:a {:href author-url} (str "@" author)]]
-              [:p description]]]]]]))
+     [:div.gallery-panel.container-fluid
+      {:on-click (fn [e]
+                   (if (or e.ctrlKey e.metaKey)
+                     (js/window.open url "_blank")
+                     (set! (.. js/window -top -location -href) url)))}
+      [:div.row
+       [:div.col-6
+        [screenshot script-name]
+        [:ul.norns-feature-container
+         (doall
+          (map #(feature % "random" script-name) feature-icons))]]
+       [:div.col-6
+        [:h3 script-name]
+        [:p "by " [:a {:href author-url} (str "@" author)]]
+        [:p description]]]]]))
 
 (defn screenshot [script-name]
   (let [author (get-in @state [:script-list script-name :author])]
