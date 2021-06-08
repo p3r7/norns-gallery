@@ -65,7 +65,7 @@
       :else
       (mount-app-element [views/main-view-all]))
 
-    (dynamic-conf/get-from-wiki-js :tag category)) ; NB: gets stored in `norns-index.state/state`
+    (dynamic-conf/get-from-wiki-js)) ; NB: gets stored in `norns-index.state/state`
   )
 
 
