@@ -1,6 +1,6 @@
 (ns norns-index.views
   (:require
-   [norns-index.utils.core :refer [member? remove-nils]]
+   [norns-index.utils.core :refer [member? remove-nils take-n-distinct-rand]]
    [norns-index.state :refer [state show-script?]]
    [norns-index.conf :as conf]))
 
@@ -63,14 +63,18 @@
 ;; VIEW: (RANDOM) FEATURED SCRIPT
 
 (defn random-scripts [nb]
-  (when-let [random-script-names (take nb (shuffle (keys (:script-list @state))))]
-    [:div.row
-      (doall
-        (map
-         (fn [script-name]
-           ^{:key (str "random-" script-name)}
-           [gallery-panel script-name])
-       random-script-names))]))
+  (let [script-list (:script-list @state)]
+    (when (< 0 (count script-list))
+      (let [random-script-names (-> (take-n-distinct-rand nb (keys script-list))
+                                    vec
+                                    shuffle)]
+        [:div.row
+         (doall
+          (map
+           (fn [script-name]
+             ^{:key (str "random-" script-name)}
+             [gallery-panel script-name])
+           random-script-names))]))))
 
 
 

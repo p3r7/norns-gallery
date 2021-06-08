@@ -7,6 +7,17 @@
 (defn find-indexes [needle haystack]
   (keep-indexed #(when (= %2 needle) %1) haystack))
 
+(defn take-n-distinct-rand
+  "Like `rand-nth` but returns a set N distinct elements from COLL."
+  [n coll]
+  (when (> n (count coll))
+    (throw (ex-info "Tried to get more elements than what the collection contains." {:ex-type :unexpected-type})))
+
+  (let [t (transient #{})]
+    (while (< (count t) n)
+      (conj! t (rand-nth coll)))
+    (persistent! t)))
+
 (defn dissoc-in
   "Like `dissoc` but allowing to pass a path like `assoc-in`."
   [m ks]
