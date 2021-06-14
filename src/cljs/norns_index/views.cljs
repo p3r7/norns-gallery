@@ -43,20 +43,20 @@
 
 (defn io-panel []
   [:div.row
-    [:div.col-12
-      [:div.gallery-panel.container-fluid
-        [:h2 "i/o icons"]
-          [:ul.norns-feature-container.norns-feature-io.row
-            (doall
-              (map
-                (fn [feature]
-                  (let [icon (simple-feature->icon (keyword feature))]
-                    ^{:key (str "io-feature-" feature)}
-                    [:li
-                      {:class (str "col-3 p-0 feature-" icon)}
-                      [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
-                      [:p feature]]))
-  ["grid" "arc" "crow" "midi" "keyboard" "mouse"]))]]]])
+   [:div.col-12
+    [:div.gallery-panel.container-fluid
+     [:h2 "i/o icons"]
+     [:ul.norns-feature-container.norns-feature-io.row
+      (doall
+       (map
+        (fn [feature]
+          (let [icon (simple-feature->icon (keyword feature))]
+            ^{:key (str "io-feature-" feature)}
+            [:li
+             {:class (str "col-3 p-0 feature-" icon)}
+             [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
+             [:p feature]]))
+        ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse"]))]]]])
 
 
 
@@ -175,7 +175,8 @@
      :keyboard "kbd"
      :mouse "mouse"
      :arc "arc"
-     :crow "crow"}
+     :crow "crow"
+     :jf "jf"}
     feature)
    (when is-required "!!"))
   )
@@ -238,6 +239,7 @@
          [grid-feature->icon-maybe
           #(simple-feature->icon-maybe :arc %1 %2)
           #(simple-feature->icon-maybe :crow %1 %2)
+          #(simple-feature->icon-maybe :jf %1 %2)
           #(simple-feature->icon-maybe :keyboard %1 %2)
           #(simple-feature->icon-maybe :mouse %1 %2)
           midi-feature->icon-maybe

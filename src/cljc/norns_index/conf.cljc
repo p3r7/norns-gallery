@@ -9,6 +9,7 @@
           :is-required true}
    :arc {:values #{:arc}}
    :crow {:values #{:crow}}
+   :jf {:values #{:jf}}
    :midi {:values #{:midi_in :midi_out}}
    :keyboard {:values #{:keyboard}}
    :mouse {:values #{:mouse}}
@@ -41,7 +42,7 @@
    "drums" "drums"
    "generative" "generative"
    "granulators" "granulators"
-   "jf" "jf"
+   ;; "jf" "jf"
    "samplers" "samplers"
    "sequencers" "sequencers"
    "synths" "synths"
@@ -55,7 +56,7 @@
    "drums"
    "generative"
    "granulators"
-   "jf"
+   ;; "jf"
    "samplers"
    "sequencers"
    "synths"
