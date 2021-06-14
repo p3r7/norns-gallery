@@ -51,6 +51,7 @@
   (let [query-params (:query (url/url (-> js/window .-location .-href)))
         random (get query-params "random")
         category (get query-params "category")
+        connectivity (get query-params "connectivity")
         author (get query-params "author")]
     (cond
       random
@@ -58,6 +59,9 @@
 
       category
       (mount-app-element [views/main-view-single-category category])
+
+      connectivity
+      (mount-app-element [views/main-view-single-connectivity-feature connectivity])
 
       author
       (mount-app-element [views/main-view-single-author author])

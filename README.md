@@ -6,6 +6,7 @@
 - http://localhost:8666
 - http://localhost:8666/?random=4
 - http://localhost:8666/?category=art
+- http://localhost:8666/?connectivity=jf
 - http://localhost:8666/?author=infinitedigits
 
 

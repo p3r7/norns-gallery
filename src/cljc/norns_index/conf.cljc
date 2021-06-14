@@ -62,3 +62,13 @@
    "synths"
    "utilities"
    ])
+
+(def script-connectivity-features
+  {"grid" "grid"
+   "arc" "arc"
+   "crow" "crow"
+   "jf" "just friend"
+   "midi" "midi"
+   "keyboard" "keyboard"
+   "mouse" "mouse"}
+  )

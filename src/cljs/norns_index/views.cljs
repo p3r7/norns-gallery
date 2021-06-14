@@ -15,7 +15,7 @@
  screenshot
  feature
  simple-feature->icon
- row-by-category row-by-author)
+ row-by-category row-by-feature row-by-author)
 
 
 ;; VIEW: MAINS
@@ -29,6 +29,10 @@
 (defn main-view-single-category [category-name]
   [:div.container-fluid
    [row-by-category category-name]])
+
+(defn main-view-single-connectivity-feature [feature-name]
+  [:div.container-fluid
+   [row-by-feature feature-name]])
 
 (defn main-view-single-author [author]
   [:div.container-fluid
@@ -55,7 +59,7 @@
             [:li
              {:class (str "col-3 p-0 feature-" icon)}
              [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
-             [:p feature]]))
+             [:p (conf/script-connectivity-features feature)]]))
         ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse"]))]]]])
 
 
@@ -94,6 +98,27 @@
      (when show-header
        [:div.col-12
         [:h1 (get conf/script-categories script-category)]])
+     (doall
+      (map #(gallery-panel %) matched-scripts))]))
+
+
+
+;; VIEW: SCRIPT GROUPED BY CONNECTIVITY
+
+(defn row-by-feature [feature-name & {:keys [show-header]}]
+  (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
+                                           (and
+                                            (member? (keyword feature-name) (:features script-props))
+                                            (show-script? script-name)
+                                            )) (:script-list @state))
+                                 keys
+                                 sort
+                                 seq)]
+    ^{:key (str feature-name)}
+    [:div.row
+     (when show-header
+       [:div.col-12
+        [:h1 (get conf/script-connectivity-features feature-name)]])
      (doall
       (map #(gallery-panel %) matched-scripts))]))
 
