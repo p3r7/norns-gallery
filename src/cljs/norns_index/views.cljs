@@ -60,7 +60,7 @@
              {:class (str "col-3 p-0 feature-" icon)}
              [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
              [:p (conf/script-connectivity-features feature)]]))
-        ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse"]))]]]])
+        ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse" "_16n"]))]]]])
 
 
 
@@ -201,7 +201,8 @@
      :mouse "mouse"
      :arc "arc"
      :crow "crow"
-     :jf "jf"}
+     :jf "jf"
+     :16n "16n"}
     feature)
    (when is-required "!!"))
   )
@@ -267,6 +268,7 @@
           #(simple-feature->icon-maybe :jf %1 %2)
           #(simple-feature->icon-maybe :keyboard %1 %2)
           #(simple-feature->icon-maybe :mouse %1 %2)
+          #(simple-feature->icon-maybe :16n %1 %2)
           midi-feature->icon-maybe
           audio-feature->icon-maybe]))
    remove-nils))

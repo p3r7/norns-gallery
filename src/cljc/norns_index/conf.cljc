@@ -13,6 +13,7 @@
    :midi {:values #{:midi_in :midi_out}}
    :keyboard {:values #{:keyboard}}
    :mouse {:values #{:mouse}}
+   :16n {:values #{:16n}}
    })
 
 (def ordered-filterable-io-features
@@ -74,5 +75,6 @@
    "jf" "just friend"
    "midi" "midi"
    "keyboard" "keyboard"
-   "mouse" "mouse"}
+   "mouse" "mouse"
+   "_16n" "16n"}
   )
