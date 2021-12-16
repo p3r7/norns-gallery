@@ -29,7 +29,7 @@
 
   :plugins   [
               [refactor-nrepl "2.5.1"]
-              [cider/cider-nrepl "0.25.0-alpha1"]
+              [cider/cider-nrepl "0.27.2"]
               ]
 
   :source-paths ["src/cljc"
