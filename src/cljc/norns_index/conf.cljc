@@ -76,5 +76,5 @@
    "midi" "midi"
    "keyboard" "keyboard"
    "mouse" "mouse"
-   "_16n" "16n"}
+   "16n" "16n"}
   )

@@ -60,7 +60,7 @@
              {:class (str "col-3 p-0 feature-" icon)}
              [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
              [:p (conf/script-connectivity-features feature)]]))
-        ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse" "_16n"]))]]]])
+        ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse" "16n"]))]]]])
 
 
 
