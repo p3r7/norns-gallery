@@ -12,7 +12,7 @@
 
 ## Setup: ClojureScript / Javascript
 
-This code is written in [ClojureScript](https://clojurescript.org/) that gets transpileld into Javascript.
+This code is written in [ClojureScript](https://clojurescript.org/) that gets transpiled into Javascript.
 
 For tooling, it uses [shadow-cljs](https://github.com/thheller/shadow-cljs) + [leiningen](https://leiningen.org/).
 
