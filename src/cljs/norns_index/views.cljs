@@ -5,7 +5,7 @@
    [norns-index.conf :as conf]))
 
 (declare
- norns-script-features->icons
+ script-io-features->icons
  ;; sub-views
  random-scripts
  filter-panel
@@ -14,7 +14,6 @@
  gallery-panel
  screenshot
  feature
- simple-feature->icon
  row-by-category row-by-feature row-by-author)
 
 
@@ -56,7 +55,7 @@
       (doall
        (map
         (fn [f]
-          (let [icon (simple-feature->icon (keyword f))]
+          (let [icon ((keyword f) conf/io-feature->icon)]
             ^{:key (str "io-feature-" f)}
             [:li
              {:class (str "col-3 p-0 feature-" icon)}
@@ -151,7 +150,7 @@
         author (get-in @state [:script-list script-name :author])
         author-url (str "https://norns.community/en/authors/" author)
         features (get-in @state [:script-list script-name :features])
-        feature-icons (norns-script-features->icons features)]
+        feature-icons (script-io-features->icons features)]
     ^{:key (str script-name)}
     [:div.col-md-6.col-lg-6.col-sm-12
      [:div.gallery-panel.container-fluid
@@ -186,32 +185,7 @@
 
 ;; HELPERS - I/O FEATURES ICONS
 
-(defn simple-feature->icon [f]
-  (get
-   {:midi "midi"
-    :grid "grid"
-    :keyboard "kbd"
-    :mouse "mouse"
-    :arc "arc"
-    :crow "crow"
-    :jf "jf"
-    :16n "16n"}
-   f))
-
-(defn simple-feature->icon-maybe [search features]
-  (when (member? search features)
-    (simple-feature->icon search)))
-
-(defn norns-script-features->icons [features]
+(defn script-io-features->icons [features]
   (->
-   (map #(% features)
-        (reverse
-         [#(simple-feature->icon-maybe :grid %1)
-          #(simple-feature->icon-maybe :arc %1)
-          #(simple-feature->icon-maybe :crow %1)
-          #(simple-feature->icon-maybe :jf %1)
-          #(simple-feature->icon-maybe :keyboard %1)
-          #(simple-feature->icon-maybe :mouse %1)
-          #(simple-feature->icon-maybe :16n %1)
-          #(simple-feature->icon-maybe :midi %1)]))
+   (map #(% conf/io-feature->icon) features)
    remove-nils))

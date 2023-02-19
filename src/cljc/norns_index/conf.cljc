@@ -4,9 +4,10 @@
 ;; CONF: SCRIPT I/O FEATURES
 
 (def io-features
-  [:grid :arc :crow
-   :jf :midi :keyboard :mouse
-   :16n])
+  [:grid :arc
+   :crow :jf
+   :midi :16n
+   :keyboard :mouse])
 
 (def script-connectivity-features
   {"grid" "grid"
@@ -14,11 +15,19 @@
    "crow" "crow"
    "jf" "just friend"
    "midi" "midi"
+   "16n" "16n"
    "keyboard" "keyboard"
-   "mouse" "mouse"
-   "16n" "16n"}
-  )
+   "mouse" "mouse"})
 
+(def io-feature->icon
+  {:midi "midi"
+   :grid "grid"
+   :keyboard "kbd"
+   :mouse "mouse"
+   :arc "arc"
+   :crow "crow"
+   :jf "jf"
+   :16n "16n"})
 
 
 ;; CONF: SCRIPT CATEGORIES
