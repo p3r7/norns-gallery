@@ -22,7 +22,13 @@ To run it:
 - install Clojure (latest version)
 - install leiningen ([instructions](https://leiningen.org/#install))
 
-Once those dependencies are satisfied, run:
+Grab js dependencies:
+
+    $ npm install
+
+(this is supposed to be automaticly done by `shadow-cljs` but for some reason is buggy)
+
+And finally launch the app to grab the last dependencies:
 
     $ lein dev
 

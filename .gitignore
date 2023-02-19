@@ -13,8 +13,6 @@ out
 /classes
 /checkouts
 /resources/public/js/compiled
-/resources/public/css/main.css
-/resources/public/css/main.css.map
 *.class
 pom.xml
 pom.xml.asc
