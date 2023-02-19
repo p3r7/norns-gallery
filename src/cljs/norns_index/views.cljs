@@ -186,6 +186,7 @@
 ;; HELPERS - I/O FEATURES ICONS
 
 (defn script-io-features->icons [features]
-  (->
-   (map #(% conf/io-feature->icon) features)
-   remove-nils))
+  (let [ordered-script-features (remove-nils (map features conf/io-features))]
+    (->
+     (map #(% conf/io-feature->icon) ordered-script-features)
+     reverse)))
