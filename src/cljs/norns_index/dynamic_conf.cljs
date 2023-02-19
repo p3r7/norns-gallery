@@ -30,7 +30,6 @@
                                   :query-params {"query" q}}))]
       (if (not= 200 (:status response))
         (js/console.error "failed to retrieve data")
-        ;; (js/console.info (get-in response [:body :data :pages :list]))
         (->> (get-in response [:body :data :pages :list])
              (keep keep-script-page)
              (into {})
@@ -38,7 +37,6 @@
              (swap! state assoc :script-list))))))
 
 (defn keep-script-page [page]
-  ;; (js/console.info (str "page: " (:path page)))
   (encore/when-let [path (:path page)
                     matches (re-matches #"^authors/(.*)/(.*)" path)
                     [_ author script-name] matches]
@@ -62,7 +60,7 @@
   (let [kw-tags (map #(-> %
                           (clojure.string/replace #" " "_")
                           keyword) tags)
-        feature-kws (set conf/io-features)]
+        feature-kws (set conf/script-io-features-order)]
     (set
      (filter feature-kws kw-tags))))
 

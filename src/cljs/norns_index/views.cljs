@@ -60,8 +60,8 @@
             [:li
              {:class (str "col-3 p-0 feature-" icon)}
              [:img {:src (str "img/feature/" icon ".svg") :alt (str f " support")}]
-             [:p (conf/script-connectivity-features f)]]))
-        (map keyword conf/io-features)))]]]])
+             [:p (conf/script-io-features f)]]))
+        (map keyword conf/script-io-features-order)))]]]])
 
 
 
@@ -119,7 +119,7 @@
     [:div.row
      (when show-header
        [:div.col-12
-        [:h1 (get conf/script-connectivity-features feature-name)]])
+        [:h1 (get conf/script-io-features feature-name)]])
      (doall
       (map #(gallery-panel %) matched-scripts))]))
 
@@ -186,7 +186,7 @@
 ;; HELPERS - I/O FEATURES ICONS
 
 (defn script-io-features->icons [features]
-  (let [ordered-script-features (remove-nils (map features conf/io-features))]
+  (let [ordered-script-features (remove-nils (map features conf/script-io-features-order))]
     (->
      (map #(% conf/io-feature->icon) ordered-script-features)
      reverse)))

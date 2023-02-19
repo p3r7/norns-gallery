@@ -12,7 +12,7 @@
 
                         :filter
                         {:txt ""
-                         :io (set conf/io-features)
+                         :io (set conf/script-io-features-order)
                          }}))
 
 
@@ -25,4 +25,4 @@
         filter-txt (get-in @state [:filter :txt])]
     (and
      (clojure.string/includes? script-name filter-txt)
-     (some #(% script-features) conf/io-features))))
+     (some #(% script-features) conf/script-io-features-order))))

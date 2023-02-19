@@ -3,13 +3,7 @@
 
 ;; CONF: SCRIPT I/O FEATURES
 
-(def io-features
-  [:grid :arc
-   :crow :jf
-   :midi :16n
-   :keyboard :mouse])
-
-(def script-connectivity-features
+(def script-io-features
   {"grid" "grid"
    "arc" "arc"
    "crow" "crow"
@@ -18,6 +12,12 @@
    "16n" "16n"
    "keyboard" "keyboard"
    "mouse" "mouse"})
+
+(def script-io-features-order
+  [:grid :arc
+   :crow :jf
+   :midi :16n
+   :keyboard :mouse])
 
 (def io-feature->icon
   {:midi "midi"
