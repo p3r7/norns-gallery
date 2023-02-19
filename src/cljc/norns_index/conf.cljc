@@ -1,5 +1,6 @@
 (ns norns-index.conf)
 
+
 
 ;; CONF: SCRIPT I/O FEATURES
 
@@ -28,6 +29,7 @@
    :crow "crow"
    :jf "jf"
    :16n "16n"})
+
 
 
 ;; CONF: SCRIPT CATEGORIES
