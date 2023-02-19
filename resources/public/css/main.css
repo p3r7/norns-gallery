@@ -27,15 +27,24 @@ h2 {
     .gallery-panel .norns-screenshot-container .img-norns-screenshot {
       z-index: 50;
       -webkit-filter: grayscale(100%);
-      filter: grayscale(100%);
-      image-rendering: -moz-crisp-edges;
-      image-rendering: crisp-edges;
-      image-rendering: pixelated; }
+      filter: grayscale(100%); }
+      @media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3 / 2), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+        .gallery-panel .norns-screenshot-container .img-norns-screenshot {
+          image-rendering: -moz-crisp-edges;
+          image-rendering: crisp-edges;
+          image-rendering: pixelated; } }
     .gallery-panel .norns-screenshot-container .img-norns-screenshot {
       position: absolute;
       top: 0;
       left: 0;
       z-index: 100; }
+
+.gallery-panel:hover {
+  background: #1565c0;
+  color: #ffffff;
+  cursor: pointer; }
+  .gallery-panel:hover a {
+    color: #ffffff; }
 
 ul.norns-feature-container {
   height: 24px;
@@ -58,12 +67,5 @@ ul.norns-feature-container {
 
 ul.norns-feature-io {
   height: auto; }
-
-.gallery-panel:hover {
-  background: #1565c0;
-  color: #ffffff;
-  cursor: pointer; }
-  .gallery-panel:hover a {
-    color: #ffffff; }
 
 /*# sourceMappingURL=main.css.map */

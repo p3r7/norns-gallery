@@ -1,8 +1,24 @@
+
+// ------------------------------------------------------------------------
+// CONSTS
+
 $white: #ffffff
 $black: #000000
 $wikiBlue: #1565c0
 $wikiDarkGrey: #424242
 $wikiLightGrey: #eeeeee
+
+
+// ------------------------------------------------------------------------
+// MIXINS / FNS
+
+@mixin retina
+  @media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx)
+    @content
+
+
+// ------------------------------------------------------------------------
+// MAIN
 
 *
   text-transform: lowercase !important
@@ -19,6 +35,10 @@ h2
   color: $wikiDarkGrey
   font-size: 1rem
   border-bottom: 1px solid $wikiDarkGrey
+
+
+// ------------------------------------------------------------------------
+// SCRIPT PANELS
 
 .gallery-panel
   background: $wikiLightGrey
@@ -37,15 +57,28 @@ h2
       z-index: 50
       -webkit-filter: grayscale(100%)
       filter: grayscale(100%)
-      image-rendering: -moz-crisp-edges
-      image-rendering: crisp-edges
-      image-rendering: pixelated
+      @include retina
+        image-rendering: -moz-crisp-edges
+        image-rendering: crisp-edges
+        image-rendering: pixelated
 
     .img-norns-screenshot
       position: absolute
       top: 0
       left: 0
       z-index: 100
+
+.gallery-panel:hover
+  background: $wikiBlue
+  color: $white
+  cursor: pointer
+
+  a
+    color: $white
+
+
+// ------------------------------------------------------------------------
+// IO ICONS
 
 ul.norns-feature-container
   height: 24px
@@ -73,11 +106,3 @@ ul.norns-feature-container
 
 ul.norns-feature-io
   height: auto
-
-.gallery-panel:hover
-  background: $wikiBlue
-  color: $white
-  cursor: pointer
-
-  a
-    color: $white
