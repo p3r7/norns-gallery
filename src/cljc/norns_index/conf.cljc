@@ -4,37 +4,24 @@
 ;; CONF: SCRIPT I/O FEATURES
 
 (def io-features
-  {:grid {:values #{:grid_64 :grid_128}
-          :catch-all-value :grid_any
-          :is-required true}
-   :arc {:values #{:arc}}
-   :crow {:values #{:crow}}
-   :jf {:values #{:jf}}
-   :midi {:values #{:midi_in :midi_out}}
-   :keyboard {:values #{:keyboard}}
-   :mouse {:values #{:mouse}}
-   :16n {:values #{:16n}}
-   })
+  [:grid :arc :crow
+   :jf :midi :keyboard :mouse
+   :16n])
 
-(def ordered-filterable-io-features
-  [:grid
-   :arc
-   :crow
-   :midi])
+(def script-connectivity-features
+  {"grid" "grid"
+   "arc" "arc"
+   "crow" "crow"
+   "jf" "just friend"
+   "midi" "midi"
+   "keyboard" "keyboard"
+   "mouse" "mouse"
+   "16n" "16n"}
+  )
 
-(defn flattended-io-features []
-  (set
-   (mapcat
-    (fn [[f f-props]]
-      (let [std-vs (:values f-props)
-            catch-all-v (:catch-all-value f-props)
-            unspecified-v f             ; NB: current simplified implem
-            all-vs (conj std-vs unspecified-v)
-            all-vs (if catch-all-v
-                     (conj all-vs catch-all-v)
-                     all-vs)]
-        all-vs))
-    io-features)))
+
+
+;; CONF: SCRIPT CATEGORIES
 
 (def script-categories
   {"art" "art"
@@ -46,7 +33,6 @@
    "generative" "generative"
    "granulators" "granulators"
    "mods" "mods"
-   ;; "jf" "jf"
    "samplers" "samplers"
    "sequencers" "sequencers"
    "synths" "synths"
@@ -63,20 +49,8 @@
    "generative"
    "granulators"
    "mods"
-   ;; "jf"
    "samplers"
    "sequencers"
    "synths"
    "utilities"
    ])
-
-(def script-connectivity-features
-  {"grid" "grid"
-   "arc" "arc"
-   "crow" "crow"
-   "jf" "just friend"
-   "midi" "midi"
-   "keyboard" "keyboard"
-   "mouse" "mouse"
-   "16n" "16n"}
-  )

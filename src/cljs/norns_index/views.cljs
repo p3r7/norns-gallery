@@ -17,6 +17,7 @@
  simple-feature->icon
  row-by-category row-by-feature row-by-author)
 
+
 
 ;; VIEW: MAINS
 
@@ -42,6 +43,7 @@
   [:div.container-fluid
    [random-scripts nb]])
 
+
 
 ;; VIEW: I/O LEGEND
 
@@ -53,14 +55,14 @@
      [:ul.norns-feature-container.norns-feature-io.row
       (doall
        (map
-        (fn [feature]
-          (let [icon (simple-feature->icon (keyword feature))]
-            ^{:key (str "io-feature-" feature)}
+        (fn [f]
+          (let [icon (simple-feature->icon (keyword f))]
+            ^{:key (str "io-feature-" f)}
             [:li
              {:class (str "col-3 p-0 feature-" icon)}
-             [:img {:src (str "img/feature/" icon ".svg") :alt (str feature " support")}]
-             [:p (conf/script-connectivity-features feature)]]))
-        ["grid" "arc" "crow" "jf" "midi" "keyboard" "mouse" "16n"]))]]]])
+             [:img {:src (str "img/feature/" icon ".svg") :alt (str f " support")}]
+             [:p (conf/script-connectivity-features f)]]))
+        (map keyword conf/io-features)))]]]])
 
 
 
@@ -88,7 +90,7 @@
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (member? script-category (:types script-props))
-                                            (show-script? script-name)
+                                            ;; (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
                                  sort
@@ -109,7 +111,7 @@
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (member? (keyword feature-name) (:features script-props))
-                                            (show-script? script-name)
+                                            ;; (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
                                  sort
@@ -130,7 +132,7 @@
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (= author (:author script-props))
-                                            (show-script? script-name)
+                                            ;; (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
                                  sort
@@ -149,8 +151,7 @@
         author (get-in @state [:script-list script-name :author])
         author-url (str "https://norns.community/en/authors/" author)
         features (get-in @state [:script-list script-name :features])
-        required-features (get-in @state [:script-list script-name :required-features])
-        feature-icons (norns-script-features->icons features required-features)]
+        feature-icons (norns-script-features->icons features)]
     ^{:key (str script-name)}
     [:div.col-md-6.col-lg-6.col-sm-12
      [:div.gallery-panel.container-fluid
@@ -185,90 +186,32 @@
 
 ;; HELPERS - I/O FEATURES ICONS
 
-(defn simple-feature->icon [feature & [is-required]]
-  (str
-   (get
-    {:midi_in "midi_i"
-     :midi_out "midi_o"
-     :midi "midi"
-     :audio_in "audio_i"
-     :audio_out "audio_o"
-     :audio "audio"
-     :grid_128 "grid_128"
-     :grid_any "grid_any"
-     :grid "grid"
-     :keyboard "kbd"
-     :mouse "mouse"
-     :arc "arc"
-     :crow "crow"
-     :jf "jf"
-     :16n "16n"}
-    feature)
-   (when is-required "!!"))
-  )
+(defn simple-feature->icon [f]
+  (get
+   {:midi "midi"
+    :grid "grid"
+    :keyboard "kbd"
+    :mouse "mouse"
+    :arc "arc"
+    :crow "crow"
+    :jf "jf"
+    :16n "16n"}
+   f))
 
-(defn simple-feature->icon-maybe [search features required-features]
+(defn simple-feature->icon-maybe [search features]
   (when (member? search features)
     (simple-feature->icon search)))
 
-(defn midi-feature->icon-maybe [features required-features]
-  (cond
-    (every? #(member? % features) #{:midi_in :midi_out})
-    "midi_io"
-
-    (member? :midi_in features)
-    (simple-feature->icon :midi_in)
-
-    (member? :midi_out features)
-    (simple-feature->icon :midi_out)
-
-    ;; NB: unspecified fallback is current implem
-    (member? :midi features)
-    (simple-feature->icon :midi)))
-
-(defn audio-feature->icon-maybe [features required-features]
-  (cond
-    (every? #(member? % features) #{:audio_in :audio_out})
-    "audio_io"
-
-    (member? :audio_in features)
-    (simple-feature->icon :audio_in)
-
-    (member? :audio_out features)
-    (simple-feature->icon :audio_out)
-
-    ;; NB: unspecified fallback is current implem
-    (member? :audio features)
-    (simple-feature->icon :audio)))
-
-(defn grid-feature->icon-maybe [features required-features]
-  (let [is-required (when required-features
-                      (member? :grid required-features))]
-    (cond
-      (member? :grid_any features)
-      (simple-feature->icon :grid_any is-required)
-
-      (every? #(member? % features) #{:grid_64 :grid_128})
-      (str "grid_64-128" (when is-required "!!"))
-
-      (member? :grid_128 features)
-      (simple-feature->icon :grid_128 is-required)
-
-      ;; NB: unspecified fallback is current implem
-      (member? :grid features)
-      (simple-feature->icon :grid is-required))))
-
-(defn norns-script-features->icons [features required-features]
+(defn norns-script-features->icons [features]
   (->
-   (map #(% features required-features)
+   (map #(% features)
         (reverse
-         [grid-feature->icon-maybe
-          #(simple-feature->icon-maybe :arc %1 %2)
-          #(simple-feature->icon-maybe :crow %1 %2)
-          #(simple-feature->icon-maybe :jf %1 %2)
-          #(simple-feature->icon-maybe :keyboard %1 %2)
-          #(simple-feature->icon-maybe :mouse %1 %2)
-          #(simple-feature->icon-maybe :16n %1 %2)
-          midi-feature->icon-maybe
-          audio-feature->icon-maybe]))
+         [#(simple-feature->icon-maybe :grid %1)
+          #(simple-feature->icon-maybe :arc %1)
+          #(simple-feature->icon-maybe :crow %1)
+          #(simple-feature->icon-maybe :jf %1)
+          #(simple-feature->icon-maybe :keyboard %1)
+          #(simple-feature->icon-maybe :mouse %1)
+          #(simple-feature->icon-maybe :16n %1)
+          #(simple-feature->icon-maybe :midi %1)]))
    remove-nils))

@@ -89,7 +89,6 @@
    (reduce-kv (fn [m k v] (assoc! m (f k) v))
               (transient (empty m)) m)))
 
-
 (defn continuous-partition [c]
   (let [first-partition (partition 2 c)
         second-partition (partition-all 2 (next c))]

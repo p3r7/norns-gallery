@@ -30,6 +30,7 @@
                                   :query-params {"query" q}}))]
       (if (not= 200 (:status response))
         (js/console.error "failed to retrieve data")
+        ;; (js/console.info (get-in response [:body :data :pages :list]))
         (->> (get-in response [:body :data :pages :list])
              (keep keep-script-page)
              (into {})
@@ -37,6 +38,7 @@
              (swap! state assoc :script-list))))))
 
 (defn keep-script-page [page]
+  ;; (js/console.info (str "page: " (:path page)))
   (encore/when-let [path (:path page)
                     matches (re-matches #"^authors/(.*)/(.*)" path)
                     [_ author script-name] matches]
@@ -60,35 +62,25 @@
   (let [kw-tags (map #(-> %
                           (clojure.string/replace #" " "_")
                           keyword) tags)
-        feature-kws (conf/flattended-io-features)]
+        feature-kws (set conf/io-features)]
     (set
      (filter feature-kws kw-tags))))
 
-(defn script-required-io-features-from-wiki-js-tags [tags]
-  (set
-   (keep
-    #(encore/when-let [_ (clojure.string/ends-with? % " required")
-                       kw (keyword (clojure.string/replace % #" required" ""))
-                       _ (member? kw conf/ordered-filterable-io-features)]
-       kw)
-    tags)))
 
 (defn wiki-js-page-def->script-def [page-def]
   (let [description (:description page-def)
         tags (:tags page-def)
         categories (script-categories-from-wiki-js-tags tags)
-        io-features (script-io-features-from-wiki-js-tags tags)
-        required-io-features (script-required-io-features-from-wiki-js-tags tags)]
+        io-features (script-io-features-from-wiki-js-tags tags)]
     {:types categories
      :description description
      :features io-features
-     :required-features required-io-features
      :author (:author page-def)
      :path (:path page-def)}))
 
 (defn page-map->script-map [page-map]
   (maintain
    map
-   (fn [[name page-def]]
-     [name (wiki-js-page-def->script-def page-def)])
+   (fn [[script-name page-def]]
+     [script-name (wiki-js-page-def->script-def page-def)])
    page-map))
