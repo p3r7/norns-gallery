@@ -25,4 +25,4 @@
         filter-txt (get-in @state [:filter :txt])]
     (and
      (clojure.string/includes? script-name filter-txt)
-     (every? #(% script-features) conf/io-features))))
+     (some #(% script-features) conf/io-features))))

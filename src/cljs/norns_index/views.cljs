@@ -90,7 +90,7 @@
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (member? script-category (:types script-props))
-                                            ;; (show-script? script-name)
+                                            (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
                                  sort
@@ -111,7 +111,7 @@
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (member? (keyword feature-name) (:features script-props))
-                                            ;; (show-script? script-name)
+                                            (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
                                  sort
@@ -132,7 +132,7 @@
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
                                             (= author (:author script-props))
-                                            ;; (show-script? script-name)
+                                            (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
                                  sort
