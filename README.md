@@ -70,3 +70,19 @@ Copy content of `resources/public/` folder to a local clone of [norns-gallery-re
 Commit and push.
 
 The published website is available at: https://p3r7.github.io/norns-gallery-render/
+
+
+### Static Site generator
+
+Just run:
+
+    $ lein cljsbuild once prerender
+    $ node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
+
+The way it works is by running the script [prerender.cljs](./prerender/cljs/norns_index/prerender.cljs) which converts the selected [norns-index.views](./src/cljs/norns_index/views.cljs) into static HTML pages, using react/reagent server-side rendering ([doc](https://reagent-project.github.io/docs/master/reagent.dom.server.html)) through a node.js runtime.
+
+This approach is inspired by the [reagent prerender example](https://github.com/reagent-project/reagent/blob/master/prerender/sitetools/prerender.cljs).
+
+An alternative approach would have been to convert the views into cljc and do the rendering using a clj script w/ [hiccup](https://github.com/weavejester/hiccup) instead of reagent ([article](https://yogthos.net/posts/2015-11-24-Serverside-Reagent.html)).
+
+A final alternative would be to keep the script in cljs and have it run under clj w/ GraalVM & Polyglot ([article](https://www.arthurbrrs.me/prerendering-react-clojurescript-land)).

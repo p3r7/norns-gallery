@@ -5,9 +5,11 @@
     "dependencies": {
         "create-react-class": "^15.7.0",
         "iframe-resizer": "^4.3.1",
+        "md5-file": "^5.0.0",
         "onchange": "7.0.2",
         "react": "^16.13.0",
-        "react-dom": "^16.13.0"
+        "react-dom": "^16.13.0",
+        "xhr2": "^0.2.1"
     },
     "devDependencies": {
         "autoprefixer": "^10.2.5"

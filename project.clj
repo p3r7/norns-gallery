@@ -30,6 +30,7 @@
   :plugins   [
               [refactor-nrepl "2.5.1"]
               [cider/cider-nrepl "0.27.2"]
+              [lein-cljsbuild "1.1.8"]
               ]
 
   :source-paths ["src/cljc"
@@ -43,10 +44,14 @@
   ;; for shadow-cljs
   :aliases {"npm-deps"
             ["run" "-m" "shadow.cljs.devtools.cli" "--npm" "npm-deps"]
+            ;; "static-build"
+            ;; NB: shadow-cljs run only runs clj, not cljs!
+            ;; ["with-profile" "static-build" "run" "-m" "shadow.cljs.devtools.cli" "run" "prerender/-main"]
             "dev"
             ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "watch" "app"]
             "prod"
-            ["with-profile" "prod" "run" "-m" "shadow.cljs.devtools.cli" "release" "app"]}
+            ["with-profile" "prod" "run" "-m" "shadow.cljs.devtools.cli" "release" "app"]
+            }
 
   :profiles
   {:dev  {:dependencies [[binaryage/devtools "1.0.2"]
@@ -58,3 +63,20 @@
                          ;; [day8.re-frame/tracing-stubs "0.5.5"]
                          ]}
 
+   :static-build {
+                  :source-paths ["src/cljc" "src/cljs" "prerender/cljs"]
+                  }
+   }
+
+  :cljsbuild
+  {:builds
+   [{:id "prerender"
+     :source-paths ["src/cljc" "src/cljs" "prerender/cljs"]
+     :compiler {:main "norns-index.prerender"
+                :target :nodejs
+                :output-dir "target/cljsbuild/prerender/out"
+                :output-to "target/cljsbuild/prerender/main.js"
+                :npm-deps true
+                :aot-cache true}}]
+   }
+  )
