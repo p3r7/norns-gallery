@@ -44,7 +44,7 @@
   (js/console.debug "code reloaded by shadow-cljs"))
 
 (defn mount-root
-  "Mount transpilled js code into #app dome element.
+  "Mount transpilled js code into #app DOM element.
   Gets called both at page load (`init`) and on automatic code reload by shadow-cljs (`on-reload`)."
   []
 
