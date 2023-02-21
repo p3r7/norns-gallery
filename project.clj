@@ -58,10 +58,3 @@
                          ;; [day8.re-frame/tracing-stubs "0.5.5"]
                          ]}
 
-   :uberjar {:source-paths ["env/prod/clj"]
-             :dependencies [
-                            ;; [day8.re-frame/tracing-stubs "0.5.5"]
-                            ]
-             :omit-source  true
-             :prep-tasks   ["compile" ["prod"]]
-             :aot :all}})
