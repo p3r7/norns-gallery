@@ -18,12 +18,12 @@
 
 ;; WIKI.JS API
 
-(defn get-from-wiki-js [& {:keys [tag]}]
+(defn on-script-lookup [cb & {:keys [tag]}]
   (go
     (let [url "https://norns.community/graphql"
-          filter (when tag
-                   (str "(tags: \"" tag "\")"))
-          q (str "{pages { list" filter " { path, tags, description } } }")
+          q-filter (when tag
+                     (str "(tags: \"" tag "\")"))
+          q (str "{pages { list" q-filter " { path, tags, description } } }")
           response (<! (http/get url
                                  {:with-credentials? false
                                   ;; :headers {"Authorization" (str "Bearer " bearer-token)}
@@ -34,7 +34,30 @@
              (keep keep-script-page)
              (into {})
              page-map->script-map
-             (swap! state assoc :script-list))))))
+             cb))))
+  )
+
+(defn get-from-wiki-js! [& {:keys [tag]}]
+  (on-script-lookup (fn [scripts] (swap! state assoc :script-list scripts))
+                    :tag tag))
+
+;; (defn get-from-wiki-js! [& {:keys [tag]}]
+;;   (go
+;;     (let [url "https://norns.community/graphql"
+;;           q-filter (when tag
+;;                      (str "(tags: \"" tag "\")"))
+;;           q (str "{pages { list" q-filter " { path, tags, description } } }")
+;;           response (<! (http/get url
+;;                                  {:with-credentials? false
+;;                                   ;; :headers {"Authorization" (str "Bearer " bearer-token)}
+;;                                   :query-params {"query" q}}))]
+;;       (if (not= 200 (:status response))
+;;         (js/console.error "failed to retrieve data")
+;;         (->> (get-in response [:body :data :pages :list])
+;;              (keep keep-script-page)
+;;              (into {})
+;;              page-map->script-map
+;;              (swap! state assoc :script-list))))))
 
 (defn keep-script-page [page]
   (encore/when-let [path (:path page)
