@@ -23,9 +23,9 @@
 
 
 
-;; API - COMMUNITY INDEX
+;; API
 
-(defn on-script-lookup-main-index [cb & {:keys [tag]}]
+(defn on-script-lookup [cb & {:keys [tag]}]
   (go
     (let [url "https://raw.githubusercontent.com/monome/norns-community/main/community.json"
           response (<! (http/get url {:with-credentials? false
@@ -40,41 +40,6 @@
              ;; (keep <keep-fn>)
              community-entries->script-map
              cb)))))
-
-
-
-;; API - WIKI.JS
-
-(defn on-script-lookup-wiki-js [cb & {:keys [tag]}]
-  (go
-    (let [url "https://norns.community/graphql"
-          q-filter (when tag
-                     (str "(tags: \"" tag "\")"))
-          q (str "{pages { list" q-filter " { path, tags, description } } }")
-          response (<! (http/get url
-                                 {:with-credentials? false
-                                  ;; :headers {"Authorization" (str "Bearer " bearer-token)}
-                                  :query-params {"query" q}}))]
-      (if (not= 200 (:status response))
-        (js/console.error "failed to retrieve data")
-        (->> (get-in response [:body :data :pages :list])
-             (keep keep-script-wiki-page)
-             (into {})
-             page-map->script-map
-             cb)))))
-
-(defn keep-script-wiki-page [page]
-  (encore/when-let [path (:path page)
-                    matches (re-matches #"^authors/(.*)/(.*)" path)
-                    [_ author script-name] matches]
-    [script-name (into page {:author author})]))
-
-
-
-;; API
-
-;; (def on-script-lookup #'on-script-lookup-wiki-js)
-(def on-script-lookup #'on-script-lookup-main-index)
 
 (defn get-script-index! [& {:keys [tag]}]
   (on-script-lookup (fn [scripts] (swap! state assoc :script-list scripts))
@@ -97,10 +62,6 @@
     (set
      (filter feature-kws kw-tags))))
 
-
-
-;; META-DATA NORMALISATION - COMMUNITY INDEX
-
 (defn community-entry->script-def [entry]
   (let [tags (:tags entry)
         categories (script-categories-from-tags tags)
@@ -115,25 +76,3 @@
 
 (defn community-entries->script-map [entries]
   (into {} (map community-entry->script-def entries)))
-
-
-
-;; META-DATA NORMALISATION - WIKI.JS
-
-(defn wiki-js-page-def->script-def [page-def]
-  (let [description (:description page-def)
-        tags (:tags page-def)
-        categories (script-categories-from-tags tags)
-        io-features (script-io-features-from-tags tags)]
-    {:types categories
-     :description description
-     :features io-features
-     :author (:author page-def)
-     :path (:path page-def)}))
-
-(defn page-map->script-map [page-map]
-  (maintain
-   map
-   (fn [[script-name page-def]]
-     [script-name (wiki-js-page-def->script-def page-def)])
-   page-map))
