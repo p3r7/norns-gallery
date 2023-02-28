@@ -130,7 +130,7 @@
 (defn row-by-author [author]
   (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
                                            (and
-                                            (= author (:author script-props))
+                                            (member? author (:author script-props))
                                             (show-script? script-name)
                                             )) (:script-list @state))
                                  keys
@@ -147,8 +147,8 @@
 (defn gallery-panel [script-name]
   (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
         description (get-in @state [:script-list script-name :description])
-        author (get-in @state [:script-list script-name :author])
-        author-url (str "https://norns.community/en/authors/" author)
+        authors (get-in @state [:script-list script-name :author])
+        author-links (map #(vec (list % (str "https://norns.community/en/authors/" %))) authors)
         features (get-in @state [:script-list script-name :features])
         feature-icons (script-io-features->icons features)]
     ^{:key (str script-name)}
@@ -166,7 +166,7 @@
           (map #(feature % "random" script-name) feature-icons))]]
        [:div.col-6
         [:h3 script-name]
-        [:p "by " [:a {:href author-url} (str "@" author)]]
+        [:p "by " (map (fn [[author author-url]] [:span [:a {:href author-url} (str "@" author)] [:br]] ) author-links)]
         [:p description]]]]]))
 
 (defn screenshot [script-name]

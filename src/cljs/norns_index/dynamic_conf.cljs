@@ -70,8 +70,7 @@
      {:types categories
       :description (:description entry)
       :features io-features
-      ;; :author (clojure.string/split (:author entry) #" ")
-      :author (:author entry)
+      :author (clojure.string/split (:author entry) #" ")
       :path (:documentation_url entry)}]))
 
 (defn community-entries->script-map [entries]
