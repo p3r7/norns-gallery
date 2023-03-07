@@ -36,20 +36,19 @@ jobs:
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
       - name: make archive - js builder script
         run: |
-          tar -czvf static-js-builder.tar.gz -C target/cljsbuild/prerender/ .
+          tar -czvf static-js-builder-${{ github.event.release.tag_name }}.tar.gz -C target/cljsbuild/prerender/ .
       - name: make archive - static site
         run: |
-          tar -czvf static.tar.gz -C target/cljsbuild/prod-static/public/ .
+          tar -czvf static-${{ github.event.release.tag_name }}.tar.gz -C target/cljsbuild/prod-static/public/ .
       - uses: actions/upload-artifact@v2
         with:
           name: artifacts
           path: |
-            ./static-js-builder.tar.gz
-            ./static.tar.gz
+            ./*.tar.gz
       - name: Release
         uses: softprops/action-gh-release@v1
         if: ${{ github.event.release.tag_name }}
         with:
           name: artifacts
           draft: true
-          files: ./target/*${{ github.event.release.tag_name }}*
+          files: ./*${{ github.event.release.tag_name }}*
