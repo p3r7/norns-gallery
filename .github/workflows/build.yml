@@ -27,13 +27,13 @@ jobs:
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && nvm install v12.16.3
       - name: get node deps
         run: |
-          npm install
+          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && npm install
       - name: build static - clj->js
         run: |
-          lein cljsbuild once prerender
+          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender
       - name: build static - js->html
         run: |
-          node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
+          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
       # - uses: actions/upload-artifact@v2
       #   with:
       #     name: artifacts
