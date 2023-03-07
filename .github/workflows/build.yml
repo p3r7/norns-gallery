@@ -46,10 +46,10 @@ jobs:
           path: |
             ./static-js-builder.tar.gz
             ./static.tar.gz
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   if: ${{ github.event.release.tag_name }}
-      #   with:
-      #     name: artifacts
-      #     draft: true
-      #     files: ./target/*${{ github.event.release.tag_name }}*
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ github.event.release.tag_name }}
+        with:
+          name: artifacts
+          draft: true
+          files: ./target/*${{ github.event.release.tag_name }}*
