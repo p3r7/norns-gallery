@@ -1,11 +1,11 @@
 name: Build artifacts
 
 on:
-  release:
-    types: [published]
-  # push:
-  #   tags:
-  #     - '*.*.*'
+  # release:
+  #   types: [published]
+  push:
+    tags:
+      - '*.*.*'
 
   workflow_dispatch:
 
@@ -38,10 +38,10 @@ jobs:
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
       - name: make archive - js builder script
         run: |
-          tar -czvf static-js-builder-${{ github.event.release.tag_name }}.tar.gz -C target/cljsbuild/prerender/ .
+          tar -czvf static-js-builder-${{ github.ref_name }}.tar.gz -C target/cljsbuild/prerender/ .
       - name: make archive - static site
         run: |
-          tar -czvf static-${{ github.event.release.tag_name }}.tar.gz -C target/cljsbuild/prod-static/public/ .
+          tar -czvf static-${{ github.ref_name }}.tar.gz -C target/cljsbuild/prod-static/public/ .
       - uses: actions/upload-artifact@v2
         with:
           name: artifacts
@@ -49,8 +49,8 @@ jobs:
             ./*.tar.gz
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: ${{ github.event.release.tag_name }}
+        # if: ${{ github.event.release.tag_name }}
         with:
           name: artifacts
           draft: true
-          files: ./*${{ github.event.release.tag_name }}*
+          files: ./*${{ github.ref_name }}*.tar.gz
