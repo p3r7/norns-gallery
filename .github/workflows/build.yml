@@ -28,21 +28,24 @@ jobs:
       - name: get node deps
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && npm install
-      - name: build static - clj->js
+      - name: build static - clj->js (js builder script)
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender
       - name: build static - js->html
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: artifacts
-      #     path: |
-      #       ./target/*.deb
-      #       ./target/*.rpm
-      #       ./target/*.md5
-      #       ./target/*.jar
-      #       ./target/*.bz2
+      - name: make archive - js builder script
+        run: |
+          tar -czvf static-js-builder.tar.gz -C target/cljsbuild/prerender/ .
+      - name: make archive - static site
+        run: |
+          tar -czvf static.tar.gz -C target/cljsbuild/prod-static/public/ .
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: |
+            ./static-js-builder.tar.gz
+            ./static.tar.gz
       # - name: Release
       #   uses: softprops/action-gh-release@v1
       #   if: ${{ github.event.release.tag_name }}
