@@ -1,9 +1,11 @@
 name: Build artifacts
 
 on:
-  push:
-    tags:
-      - '*.*.*'
+  release:
+    types: [published]
+  # push:
+  #   tags:
+  #     - '*.*.*'
 
   workflow_dispatch:
 
