@@ -35,7 +35,7 @@ jobs:
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender
       - name: build static - js->html
         run: |
-          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
+          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js --mode dir --dest-dir target/cljsbuild/prod-static/public/
       - name: make archive - js builder script
         run: |
           tar -czvf static-js-builder-${{ github.ref_name }}.tar.gz -C target/cljsbuild/prerender/ .
