@@ -18,6 +18,24 @@
 
 
 
+;; ASSETS PATHS
+
+;; old implem
+;; (defn script-name->screenshot [script-name]
+;;   (let [author (get-in @state [:script-list script-name :author])]
+;;     (str "https://norns.community/community/" author "/" script-name ".png")))
+
+(defn script-name->screenshot [script-name] (str "https://vaporwavemall.com/assets/screenshots/" script-name ".png"))
+
+(defn script-name->url [script-name]
+  ;; (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
+  (str "https://vaporwavemall.com/" script-name))
+
+;; (def io-icon-folder "img/feature/")
+(def io-icon-folder "https://vaporwavemall.com/assets/icons/")
+
+
+
 ;; VIEW: MAINS
 
 (defn main-view-all []
@@ -59,7 +77,7 @@
             ^{:key (str "io-feature-" f)}
             [:li
              {:class (str "col-3 p-0 feature-" icon)}
-             [:img {:src (str "img/feature/" icon ".svg") :alt (str f " support")}]
+             [:img {:src (str io-icon-folder icon ".svg") :alt (str f " support")}]
              [:p (conf/script-io-features f)]]))
         (map keyword conf/script-io-features-order)))]]]])
 
@@ -145,7 +163,7 @@
 ;; VIEWS: SCRIPT PANEL
 
 (defn gallery-panel [script-name]
-  (let [url (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
+  (let [url (script-name->url script-name)
         description (get-in @state [:script-list script-name :description])
         authors (get-in @state [:script-list script-name :author])
         author-links (map #(vec (list % (str "https://norns.community/en/authors/" %))) authors)
@@ -175,16 +193,15 @@
      ]))
 
 (defn screenshot [script-name]
-  (let [author (get-in @state [:script-list script-name :author])]
     [:div.norns-screenshot-container
      [:img.img-norns-screenshot-default {:alt " " :src (str "https://norns.community/meta/scriptname.png")}]
-     [:img.img-norns-screenshot {:alt " " :src (str "https://norns.community/community/" author "/" script-name ".png")}]
-     ]))
+     [:img.img-norns-screenshot {:alt " " :src (script-name->screenshot script-name)}]
+     ])
 
 (defn feature [feature-name & [script-category script-name]]
   ^{:key (str script-category "." script-name "." feature-name)}
   [:li {:class (str "feature-" feature-name)}
-   [:img {:src (str "img/feature/" feature-name ".svg")}]])
+   [:img {:src (str io-icon-folder feature-name ".svg")}]])
 
 
 
