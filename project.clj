@@ -9,6 +9,7 @@
                                org.clojure/google-closure-library
                                org.clojure/google-closure-library-third-party]]
                  [com.taoensso/encore "3.18.0"]
+                 [org.clojure/tools.cli "1.0.214"]
                  [org.clojure/core.async "0.4.500"]
                  ;; [com.rpl/specter "1.1.3"]
                  ;; [yogthos/config "1.1.5"]

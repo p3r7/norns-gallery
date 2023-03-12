@@ -3,10 +3,11 @@
    ;; core
    [cljs.nodejs :as nodejs]
    [clojure.string :as string]
+   [clojure.tools.cli :refer [parse-opts]]
    [goog.events :as evt]
    [reagent.core :as r]
    [reagent.dom.server :as server]
-   [reagent.debug :refer [log]]
+   [reagent.debug :refer [log error]]
 
    ;; state
    [norns-index.dynamic-conf :as dynamic-conf]
@@ -54,42 +55,109 @@
 
 
 
-;; MAIN
+;; CORE - LOGS
 
+(defn pprint [v]
+  (log (.stringify js/JSON (clj->js v))))
+
+(defn fatal [msg]
+  ;; (error msg)
+  (log msg)
+  (js/process.exit 1))
+
+
+
+;; CLI OPTS
+
+(def in-resource-dir "resources/public")
 (def html-string-app-container "<div id=\"app\"></div>")
 (def html-string-app-js "<script src=\"js/compiled/app.js\"></script>")
 
-(def in-resource-dir "resources/public")
+(def modes ["dir" "file"])
+
+(def cli-options
+  [[nil "--mode MODE" "Mode, either dir or file"
+    ;; :validate [#(not (nil? (get modes %))) "Invalid mode"]
+    ]
+   [nil "--source-dir SOURCE_DIR" "Source dir file for mode=dir"
+    :default in-resource-dir
+    :validate [#(fs/existsSync %) "File does not exist"]]
+   [nil "--source-html SOURCE_HTML" "Source HTML file to populate"
+    :validate [#(fs/existsSync %) "File does not exist"]]
+   [nil "--replace-tag REPLACE_TAG" "Tag to replace in source HTML file"
+    :default html-string-app-js]
+   [nil "--dest-dir DEST_DIR" "Output dir where to have the site generated"
+    :validate [#(not (nil? %)) "Mandatory"]
+    ]])
+
+(def mandatory-args [:mode :dest-dir])
+
+
+
+;; MAIN
 
 (defn -main [& args]
-  (let [[outdir] args]
+  ;; NB: node.js lacks `XMLHttpRequest` to do ajax calls, so we inject it using lib `xhr2`
+  (set! js/XMLHttpRequest (nodejs/require "xhr2"))
 
-    ;; NB: node.js lacks `XMLHttpRequest` to do ajax calls, so we inject it using lib `xhr2`
-    (set! js/XMLHttpRequest (nodejs/require "xhr2"))
+  (let [parsed (parse-opts args cli-options)
+        opts (:options parsed)
+        errs (:errors parsed)
+        mode (:mode opts)
+        dest-dir (:dest-dir opts)
+        src-dir (when (= mode "dir")
+                  (:source-dir opts))
+        index (:source-html opts)
+        index (if (and (nil? index) (not (nil? src-dir)))
+                (path/join src-dir "index.html")
+                index)
+
+        mandatory-args (if (= mode "file")
+                         (cons :source-html mandatory-args )
+                         mandatory-args)
+        ]
+
+    ;; (pprint parsed)
+
+    ;; --------------------------------
+    ;; args validation
+
+    (when (not (nil? errs))
+      (fatal (string/join "\n" errs)))
+
+    (doall
+     (map
+      #(when (nil? (% opts))
+         (fatal (str "Missing mandatory argument --" (name %))))
+      mandatory-args))
 
     (log "Generating site")
 
     (dynamic-conf/on-script-lookup
      (fn [scripts]
        (swap! state/state assoc :script-list scripts)
-       ;; (log (.stringify js/JSON (clj->js (:script-list @state/state))))
+       ;; (pprint (:script-list @state/state))
 
-       (mkdirs outdir)
-       (fs/cpSync in-resource-dir outdir
-                  #js {:force true
-                       :recursive true
-                       :filter (fn [src _dst]
-                                 (and
-                                  (not (string/includes? src "js/compiled/"))
-                                  (not (string/includes? src "index.html"))))})
+       (log "Retrieved script index")
 
-       (let [html-template (fs/readFileSync (path/join in-resource-dir "index.html") #js {:encoding "utf8"})
+       (mkdirs dest-dir)
+
+       (when (= mode "dir")
+         (fs/cpSync src-dir dest-dir
+                    #js {:force true
+                         :recursive true
+                         :filter (fn [src _dst]
+                                   (and
+                                    (not (string/includes? src "js/compiled/"))
+                                    (not (string/includes? src "index.html"))))}))
+
+       (let [html-template (fs/readFileSync index #js {:encoding "utf8"})
              ;; html-all-scritps (server/render-to-static-markup [views/main-view-all])
              html-all-scritps (server/render-to-string [views/main-view-all])
              html-page-all-scritps (-> html-template
                                        (clojure.string/replace html-string-app-js "")
                                        (clojure.string/replace html-string-app-container html-all-scritps))]
-         (write-file (path/join outdir "index.html") html-page-all-scritps))
+         (write-file (path/join dest-dir "index.html") html-page-all-scritps))
 
        (log "Wrote site")
        (js/process.exit 0)))))

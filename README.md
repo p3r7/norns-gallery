@@ -77,7 +77,7 @@ The published website is available at: https://p3r7.github.io/norns-gallery-rend
 Just run:
 
     $ lein cljsbuild once prerender
-    $ node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
+    $ node target/cljsbuild/prerender/main.js --mode dir --dest-dir target/cljsbuild/prod-static/public/
 
 The way it works is by running the script [prerender.cljs](./prerender/cljs/norns_index/prerender.cljs) which converts the selected [norns-index.views](./src/cljs/norns_index/views.cljs) into static HTML pages, using react/reagent server-side rendering ([doc](https://reagent-project.github.io/docs/master/reagent.dom.server.html)) through a node.js runtime.
 
