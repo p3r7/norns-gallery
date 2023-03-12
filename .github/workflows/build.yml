@@ -26,19 +26,30 @@ jobs:
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
       - name: install node.js
         run: |
-          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && nvm install v19.6.1
+          . "$NVM_DIR/nvm.sh" && nvm install v19.6.1
+        env:
+          NVM_DIR: $HOME/.nvm
       - name: get node deps
         run: |
-          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && npm install
+          . "$NVM_DIR/nvm.sh" && npm install
+        env:
+          NVM_DIR: $HOME/.nvm
       - name: build static - clj->js (js builder script)
         run: |
-          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender
+          . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender
+        env:
+          NVM_DIR: $HOME/.nvm
       - name: build static - js->html
         run: |
-          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
+          . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js target/cljsbuild/prod-static/public/
+        env:
+          NVM_DIR: $HOME/.nvm
       - name: make archive - js builder script
         run: |
           tar -czvf static-js-builder-${{ github.ref_name }}.tar.gz -C target/cljsbuild/prerender/ .
+      - name: make archive - js builder script (unversioned)
+        run: |
+          tar -czvf static-js-builder.tar.gz -C target/cljsbuild/prerender/ .
       - name: make archive - static site
         run: |
           tar -czvf static-${{ github.ref_name }}.tar.gz -C target/cljsbuild/prod-static/public/ .
