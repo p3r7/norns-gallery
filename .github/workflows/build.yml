@@ -55,5 +55,5 @@ jobs:
         # if: ${{ github.event.release.tag_name }}
         with:
           name: ${{ github.ref_name }}
-          draft: true
-          files: ./*${{ github.ref_name }}*.tar.gz
+          # draft: true
+          files: ./*.tar.gz
