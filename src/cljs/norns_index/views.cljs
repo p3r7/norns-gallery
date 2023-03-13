@@ -170,7 +170,7 @@
         features (get-in @state [:script-list script-name :features])
         feature-icons (script-io-features->icons features)]
     ^{:key (str script-name)}
-    [:div.col-md-6.col-lg-6.col-sm-12
+    [:div.d-block.col-xl-3.col-lg-6.col-md-6.col-sm-12
      [:div.gallery-panel.container-fluid
       {:on-click (fn [e]
                    (if (or e.ctrlKey e.metaKey)
