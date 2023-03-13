@@ -25,6 +25,10 @@
 ;;   (let [author (get-in @state [:script-list script-name :author])]
 ;;     (str "https://norns.community/community/" author "/" script-name ".png")))
 
+(defn author->author-url [author]
+  ;; (str "https://norns.community/en/authors/" author)
+  (str "https://vaporwavemall.com/author#" author))
+
 (defn script-name->screenshot [script-name] (str "https://vaporwavemall.com/assets/screenshots/" script-name ".png"))
 
 (defn script-name->url [script-name]
@@ -168,7 +172,7 @@
   (let [url (script-name->url script-name)
         description (get-in @state [:script-list script-name :description])
         authors (get-in @state [:script-list script-name :author])
-        author-links (map #(vec (list % (str "https://norns.community/en/authors/" %))) authors)
+        author-links (map #(vec (list % (author->author-url %))) authors)
         features (get-in @state [:script-list script-name :features])
         feature-icons (script-io-features->icons features)]
     ^{:key (str script-name)}
