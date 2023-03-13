@@ -79,18 +79,22 @@
   [[nil "--mode MODE" "Mode, either dir or file"
     ;; :validate [#(not (nil? (get modes %))) "Invalid mode"]
     ]
+
    [nil "--source-dir SOURCE_DIR" "Source dir file for mode=dir"
     :default in-resource-dir
     :validate [#(fs/existsSync %) "File does not exist"]]
+   [nil "--dest-dir DEST_DIR" "Output dir where to have the site generated"
+    :validate [#(not (nil? %)) "Mandatory"]]
+
    [nil "--source-html SOURCE_HTML" "Source HTML file to populate"
     :validate [#(fs/existsSync %) "File does not exist"]]
-   [nil "--replace-tag REPLACE_TAG" "Tag to replace in source HTML file"
-    :default html-string-app-js]
-   [nil "--dest-dir DEST_DIR" "Output dir where to have the site generated"
-    :validate [#(not (nil? %)) "Mandatory"]
-    ]])
+   [nil "--dest-html DEST_HTML" "Dest HTML file to write"]
 
-(def mandatory-args [:mode :dest-dir])
+   [nil "--replace-tag REPLACE_TAG" "Tag to replace in source HTML file"
+    :default html-string-app-container]
+   ])
+
+(def mandatory-args [:mode])
 
 
 
@@ -107,13 +111,22 @@
         dest-dir (:dest-dir opts)
         src-dir (when (= mode "dir")
                   (:source-dir opts))
-        index (:source-html opts)
-        index (if (and (nil? index) (not (nil? src-dir)))
+        src-html (:source-html opts)
+        src-html (if (and (nil? src-html) (not (nil? src-dir)))
                 (path/join src-dir "index.html")
-                index)
+                src-html)
 
-        mandatory-args (if (= mode "file")
-                         (cons :source-html mandatory-args )
+        mandatory-args (case mode
+
+                         "dir"
+                         (conj mandatory-args
+                               ;; :source-dir
+                               :dest-dir)
+
+                         "file"
+                         (conj mandatory-args :source-html :dest-html)
+
+                         :default
                          mandatory-args)
         ]
 
@@ -140,24 +153,35 @@
 
        (log "Retrieved script index")
 
-       (mkdirs dest-dir)
-
        (when (= mode "dir")
+
+         (mkdirs dest-dir)
+
          (fs/cpSync src-dir dest-dir
                     #js {:force true
                          :recursive true
                          :filter (fn [src _dst]
                                    (and
                                     (not (string/includes? src "js/compiled/"))
-                                    (not (string/includes? src "index.html"))))}))
+                                    (not (string/includes? src (path/basename src-html)))))})
+         (log "Wrote dest dir"))
 
-       (let [html-template (fs/readFileSync index #js {:encoding "utf8"})
+       (let [html-template (fs/readFileSync src-html #js {:encoding "utf8"})
              ;; html-all-scritps (server/render-to-static-markup [views/main-view-all])
              html-all-scritps (server/render-to-string [views/main-view-all])
              html-page-all-scritps (-> html-template
                                        (clojure.string/replace html-string-app-js "")
-                                       (clojure.string/replace html-string-app-container html-all-scritps))]
-         (write-file (path/join dest-dir "index.html") html-page-all-scritps))
+                                       (clojure.string/replace (:replace-tag opts) html-all-scritps))]
+
+         (case mode
+
+           "dir"
+           (write-file (path/join dest-dir (path/basename src-html)) html-page-all-scritps)
+
+           "file"
+           (write-file (:dest-html opts) html-page-all-scritps)))
+
+       (log "Wrote HTML index")
 
        (log "Wrote site")
        (js/process.exit 0)))))
