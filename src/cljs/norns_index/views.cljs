@@ -186,7 +186,7 @@
          (doall
           (map #(feature % "random" script-name) feature-icons))]]
        [:div.col-6
-        [:h3 script-name]
+        [:h3.script-name script-name]
         [:p "by " (map (fn [[author author-url]]
                          ^{:key (str author)}
                          [:span [:a {:href author-url} (str "@" author)] [:br]])
