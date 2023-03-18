@@ -46,7 +46,6 @@
 
 (defn main-view-all []
   [:div.container-fluid
-   [io-panel]
    (doall
     (map #(row-by-category % :show-header true) conf/script-categories-order))])
 
