@@ -169,14 +169,21 @@
 
 (defn gallery-panel [script-name]
   (let [url (script-name->url script-name)
-        description (get-in @state [:script-list script-name :description])
-        authors (get-in @state [:script-list script-name :author])
+        script (get-in @state [:script-list script-name])
+        description (:description script)
+        authors (:author script)
         author-links (map #(vec (list % (author->author-url %))) authors)
-        features (get-in @state [:script-list script-name :features])
-        feature-icons (script-io-features->icons features)]
+        features (:features script)
+        feature-icons (script-io-features->icons features)
+
+        categories (:types script)
+        ]
     ^{:key (str script-name)}
     [:div.d-block.col-md-6.col-sm-12
-     {:class (when wide-screen-support "col-xl-3")}
+     {:class
+      (map name (into categories features))
+      ;; (when wide-screen-support "col-xl-3")
+      }
      [:div.gallery-panel.container-fluid
       {:on-click (fn [e]
                    (if (or e.ctrlKey e.metaKey)
