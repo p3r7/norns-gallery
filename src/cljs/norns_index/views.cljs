@@ -45,6 +45,16 @@
 ;; VIEW: MAINS
 
 (defn main-view-all []
+  (when-let [scripts (-> (:script-list @state)
+                         keys
+                         sort
+                         seq)]
+    [:div.container-fluid
+     [:div.row
+      (doall
+       (map #(gallery-panel %) scripts))]]))
+
+(defn main-view-all-categorized []
   [:div.container-fluid
    (doall
     (map #(row-by-category % :show-header true) conf/script-categories-order))])
