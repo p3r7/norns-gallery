@@ -23,8 +23,7 @@
 (defn show-script? [script-name]
   (let [script-def (get-in @state [:script-list script-name])
 
-        ;; TODO: does this convertion to set of keywords beforehand!
-        script-categories (set (map keyword (:types script-def)))
+        script-categories (:types script-def)
         script-io (:features script-def)
 
         filter-txt (get-in @state [:filter :txt])

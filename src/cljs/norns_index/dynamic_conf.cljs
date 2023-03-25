@@ -49,15 +49,18 @@
 
 ;; META-DATA NORMALISATION
 
+(defn str->kw [s]
+  (-> s
+      (clojure.string/replace #" " "_")
+      keyword))
+
 (defn script-categories-from-tags [tags]
-    (into
-     []
-     (filter #(member? % conf/script-categories-order) tags)))
+   (set
+    (map str->kw
+     (filter #(member? % conf/script-categories-order) tags))))
 
 (defn script-io-features-from-tags [tags]
-  (let [kw-tags (map #(-> %
-                          (clojure.string/replace #" " "_")
-                          keyword) tags)
+  (let [kw-tags (map str->kw tags)
         feature-kws (set conf/script-io-features-order)]
     (set
      (filter feature-kws kw-tags))))
