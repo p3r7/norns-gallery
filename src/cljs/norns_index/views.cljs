@@ -113,22 +113,23 @@
        (let [checkbox-id (str "checkbox-category-" f)]
          ^{:key (str "checkbox-category-" f)}
          [:div.form-check
-          [:input.form-check-input
+          [:input ;; .btn-check
            {:type "checkbox"
-            :name checkbox-id
-            :checked ((keyword f) (get-in @state [:filter :categories]))
+            ;; :autocomplete "off"
+            :id checkbox-id
+            ;; :checked ((keyword f) (get-in @state [:filter :categories]))
             :on-change (fn [e]
 
-                         (if e.target.checked
-                           (js/console.info (str f " is ON"))
-                           (js/console.info (str f " is OFF")))
+                         ;; (if e.target.checked
+                         ;;   (js/console.info (str f " is ON"))
+                         ;;   (js/console.info (str f " is OFF")))
 
                          (.stopPropagation e)
                          (if e.target.checked
                            (swap! state update-in [:filter :categories] conj (keyword f))
                            (swap! state update-in [:filter :categories] disj (keyword f))))
             }]
-          [:label.form-check-label
+          [:label ;; .btn.btn-primary
            {:for checkbox-id}] f
           ]))
      (map name conf/script-categories-order)))])
@@ -141,10 +142,11 @@
        (let [checkbox-id (str "checkbox-io-" f)]
          ^{:key (str "checkbox-io-" f)}
          [:div.form-check
-          [:input.form-check-input
+          [:input ;; .btn-check
            {:type "checkbox"
-            :name checkbox-id
-            :checked ((keyword f) (get-in @state [:filter :io]))
+            ;; :autocomplete "off"
+            :id checkbox-id
+            ;; :checked ((keyword f) (get-in @state [:filter :io]))
             :on-change (fn [e]
 
                          ;; (if e.target.checked
@@ -156,7 +158,7 @@
                            (swap! state update-in [:filter :io] conj (keyword f))
                            (swap! state update-in [:filter :io] disj (keyword f))))
             }]
-          [:label.form-check-label
+          [:label ;; .btn.btn-primary
            {:for checkbox-id}] f
           ]))
      (map name conf/script-io-features-order)))])
