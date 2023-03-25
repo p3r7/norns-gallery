@@ -110,10 +110,10 @@
    (doall
     (map
      (fn [f]
-       (let [checkbox-id (str "checkbox-category-" f)]
-         ^{:key (str "checkbox-category-" f)}
+       (let [checkbox-id (str "btn-category-" f)]
+         ^{:key (str "btn-category-" f)}
          [:div.form-check
-          [:input ;; .btn-check
+          [:input.btn-check
            {:type "checkbox"
             ;; :autocomplete "off"
             :id checkbox-id
@@ -129,9 +129,8 @@
                            (swap! state update-in [:filter :categories] conj (keyword f))
                            (swap! state update-in [:filter :categories] disj (keyword f))))
             }]
-          [:label ;; .btn.btn-primary
-           {:for checkbox-id}] f
-          ]))
+          [:label.btn.btn-primary
+           {:for checkbox-id} f]]))
      (map name conf/script-categories-order)))])
 
 (defn io-filter-form []
@@ -139,10 +138,10 @@
    (doall
     (map
      (fn [f]
-       (let [checkbox-id (str "checkbox-io-" f)]
-         ^{:key (str "checkbox-io-" f)}
+       (let [checkbox-id (str "btn-io-" f)]
+         ^{:key (str "btn-io-" f)}
          [:div.form-check
-          [:input ;; .btn-check
+          [:input.btn-check
            {:type "checkbox"
             ;; :autocomplete "off"
             :id checkbox-id
@@ -158,9 +157,8 @@
                            (swap! state update-in [:filter :io] conj (keyword f))
                            (swap! state update-in [:filter :io] disj (keyword f))))
             }]
-          [:label ;; .btn.btn-primary
-           {:for checkbox-id}] f
-          ]))
+          [:label.btn.btn-primary
+           {:for checkbox-id} f]]))
      (map name conf/script-io-features-order)))])
 
 (defn filter-panel []
