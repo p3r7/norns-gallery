@@ -112,7 +112,7 @@
      (fn [f]
        (let [checkbox-id (str "btn-category-" f)]
          ^{:key (str "btn-category-" f)}
-         [:div.form-check
+         [:div.form-check.form-check-inline
           [:input.btn-check
            {:type "checkbox"
             ;; :autocomplete "off"
@@ -140,7 +140,7 @@
      (fn [f]
        (let [checkbox-id (str "btn-io-" f)]
          ^{:key (str "btn-io-" f)}
-         [:div.form-check
+         [:div.form-check.form-check-inline
           [:input.btn-check
            {:type "checkbox"
             ;; :autocomplete "off"
