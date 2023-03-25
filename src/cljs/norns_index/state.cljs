@@ -8,12 +8,13 @@
 
 ;; STATE
 
-(defonce state (r/atom {:script-list {}
+(defonce state (r/atom
+                {:script-list {}
 
-                        :filter
-                        {:txt ""
-                         :io (set conf/script-io-features-order)
-                         }}))
+                 :filter {:txt ""
+                          :categories #{}
+                          :io #{}}
+                 }))
 
 
 
@@ -21,8 +22,18 @@
 
 (defn show-script? [script-name]
   (let [script-def (get-in @state [:script-list script-name])
-        script-features (:features script-def)
-        filter-txt (get-in @state [:filter :txt])]
-    (and
-     (clojure.string/includes? script-name filter-txt)
-     (some #(% script-features) conf/script-io-features-order))))
+
+        ;; TODO: does this convertion to set of keywords beforehand!
+        script-categories (set (map keyword (:types script-def)))
+        script-io (:features script-def)
+
+        filter-txt (get-in @state [:filter :txt])
+        filter-categories (get-in @state [:filter :categories])
+        filter-io (get-in @state [:filter :io])]
+    (boolean
+     (and
+      (clojure.string/includes? script-name filter-txt)
+      (or (empty? filter-categories)
+          (every? script-categories filter-categories))
+      (or (empty? filter-io)
+          (every? script-io filter-io))))))

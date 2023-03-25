@@ -1,5 +1,6 @@
 (ns norns-index.views
   (:require
+   [taoensso.encore :as encore]
    [norns-index.utils.core :refer [member? remove-nils take-n-distinct-rand]]
    [norns-index.state :refer [state show-script?]]
    [norns-index.conf :as conf]))
@@ -45,14 +46,18 @@
 ;; VIEW: MAINS
 
 (defn main-view-all []
-  (when-let [scripts (-> (:script-list @state)
-                         keys
-                         sort
-                         seq)]
+
+
     [:div.container-fluid
-     [:div.row
-      (doall
-       (map #(gallery-panel %) scripts))]]))
+     [filter-panel]
+     (encore/when-let [script-names (-> (:script-list @state)
+                                 keys
+                                 sort
+                                 seq)
+                filtered-script-names (filter show-script? script-names)]
+       [:div.row
+        (doall
+         (map #(gallery-panel %) filtered-script-names))])])
 
 (defn main-view-all-categorized []
   [:div.container-fluid
@@ -95,6 +100,72 @@
              [:img {:src (str io-icon-folder icon ".svg") :alt (str f " support")}]
              [:p (conf/script-io-features f)]]))
         (map keyword conf/script-io-features-order)))]]]])
+
+
+
+;; VIEW: FILTER FORM
+
+(defn categories-filter-form []
+  [:div
+   (doall
+    (map
+     (fn [f]
+       (let [checkbox-id (str f "-checkbox")]
+         ^{:key (str "checkbox-io-" f)}
+         [:div.form-check
+          [:input.form-check-input
+           {:type "checkbox"
+            :name checkbox-id
+            :checked ((keyword f) (get-in @state [:filter :categories]))
+            :on-change (fn [e]
+
+                         ;; (if e.target.checked
+                         ;;   (js/console.info (str f " is ON"))
+                         ;;   (js/console.info (str f " is OFF")))
+
+                         (.stopPropagation e)
+                         (if e.target.checked
+                           (swap! state update-in [:filter :categories] conj (keyword f))
+                           (swap! state update-in [:filter :categories] disj (keyword f))))
+            }]
+          [:label.form-check-label
+           {:for checkbox-id}] f
+          ]))
+     (map name conf/script-categories-order)))])
+
+(defn io-filter-form []
+  [:div
+   (doall
+    (map
+     (fn [f]
+       (let [checkbox-id (str f "-checkbox")]
+         ^{:key (str "checkbox-io-" f)}
+         [:div.form-check
+          [:input.form-check-input
+           {:type "checkbox"
+            :name checkbox-id
+            :checked ((keyword f) (get-in @state [:filter :io]))
+            :on-change (fn [e]
+
+                         ;; (if e.target.checked
+                         ;;   (js/console.info (str f " is ON"))
+                         ;;   (js/console.info (str f " is OFF")))
+
+                         (.stopPropagation e)
+                         (if e.target.checked
+                           (swap! state update-in [:filter :io] conj (keyword f))
+                           (swap! state update-in [:filter :io] disj (keyword f))))
+            }]
+          [:label.form-check-label
+           {:for checkbox-id}] f
+          ]))
+     (map name conf/script-io-features-order)))])
+
+(defn filter-panel []
+  [:div
+   [categories-filter-form]
+   [io-filter-form]]
+  )
 
 
 
@@ -194,11 +265,12 @@
       (map name (into categories features))
       ;; (when wide-screen-support "col-xl-3")
       }
+     ;; [:a.gallery-panel-link {:href url}
      [:div.gallery-panel.container-fluid
-      {:on-click (fn [e]
-                   (if (or e.ctrlKey e.metaKey)
-                     (js/window.open url "_blank")
-                     (set! (.. js/window -top -location -href) url)))}
+      ;; {:on-click (fn [e]
+      ;;              (if (or e.ctrlKey e.metaKey)
+      ;;                (js/window.open url "_blank")
+      ;;                (set! (.. js/window -top -location -href) url)))}
       [:div.row
        [:div.col-6
         [screenshot script-name]
