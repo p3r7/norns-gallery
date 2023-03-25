@@ -110,8 +110,8 @@
    (doall
     (map
      (fn [f]
-       (let [checkbox-id (str f "-checkbox")]
-         ^{:key (str "checkbox-io-" f)}
+       (let [checkbox-id (str "checkbox-category-" f)]
+         ^{:key (str "checkbox-category-" f)}
          [:div.form-check
           [:input.form-check-input
            {:type "checkbox"
@@ -119,9 +119,9 @@
             :checked ((keyword f) (get-in @state [:filter :categories]))
             :on-change (fn [e]
 
-                         ;; (if e.target.checked
-                         ;;   (js/console.info (str f " is ON"))
-                         ;;   (js/console.info (str f " is OFF")))
+                         (if e.target.checked
+                           (js/console.info (str f " is ON"))
+                           (js/console.info (str f " is OFF")))
 
                          (.stopPropagation e)
                          (if e.target.checked
@@ -138,7 +138,7 @@
    (doall
     (map
      (fn [f]
-       (let [checkbox-id (str f "-checkbox")]
+       (let [checkbox-id (str "checkbox-io-" f)]
          ^{:key (str "checkbox-io-" f)}
          [:div.form-check
           [:input.form-check-input
