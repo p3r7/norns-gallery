@@ -21,7 +21,7 @@
                  ;; client-side code (SPA)
                  [thheller/shadow-cljs "2.11.18"]
                  [hiccup "1.0.5"]
-                 [reagent "0.10.0"]
+                 [reagent "1.2.0"]
                  ;; [re-frame "0.12.0"]
                  ;; [day8.re-frame/http-fx "0.2.1"]
                  ;; [re-com "2.9.0"]
