@@ -17,8 +17,10 @@
 
    ;; app
    [norns-index.views :as views]
-   ["iframe-resizer" :as iframe-resizer]
-   ))
+
+   ;; js libs
+   ;; [iframe-resizer :as iframe-resizer]
+   [react-dom :as react-dom]))
 
 
 (declare mount-root mount-app-element app-element
@@ -76,10 +78,19 @@
 
 ;; HELPERS - DOM
 
+(defonce is-first-load (atom true))
+
 (defn mount
   "Mount and render hiccup COMPONENT on dom element EL."
   [component el]
-  (rdom/render component el))
+
+  (let [at-first-load @is-first-load]
+    (if (and at-first-load (.hasChildNodes el))
+      (react-dom/hydrate (r/as-element component) el)
+      (rdom/render component el))
+
+    (when at-first-load
+      (reset! is-first-load false))))
 
 (defn mount-app-element
   "Mount hiccup COMPONENT on dom element #app."
