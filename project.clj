@@ -29,8 +29,8 @@
                  [com.cemerick/url "0.1.1"]]
 
   :plugins   [
-              [refactor-nrepl "2.5.1"]
-              [cider/cider-nrepl "0.27.2"]
+              [refactor-nrepl "3.6.0"]
+              [cider/cider-nrepl "0.30.0"]
               [lein-cljsbuild "1.1.8"]
               ]
 
