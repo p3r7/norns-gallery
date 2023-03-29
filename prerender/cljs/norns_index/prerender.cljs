@@ -168,9 +168,9 @@
 
        (let [html-template (fs/readFileSync src-html #js {:encoding "utf8"})
              ;; html-all-scritps (server/render-to-static-markup [views/main-view-all])
-             html-all-scritps (server/render-to-string [views/main-view-all])
+             html-all-scritps (str "<div id=\"app\">" (server/render-to-string [views/main-view-all]) "</div>")
              html-page-all-scritps (-> html-template
-                                       (clojure.string/replace html-string-app-js "")
+                                       ;; (clojure.string/replace html-string-app-js "")
                                        (clojure.string/replace (:replace-tag opts) html-all-scritps))]
 
          (case mode
