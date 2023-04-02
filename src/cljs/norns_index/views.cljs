@@ -299,7 +299,7 @@
 (defn feature [feature-name & [script-category script-name]]
   ^{:key (str script-category "." script-name "." feature-name)}
   [:li {:class (str "feature-" feature-name)}
-   [:img {:src (str io-icon-folder feature-name ".svg")}]])
+   [:img {:src (str io-icon-folder feature-name ".svg") :alt feature-name}]])
 
 
 
