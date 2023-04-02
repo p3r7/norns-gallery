@@ -104,6 +104,8 @@
   ;; NB: node.js lacks `XMLHttpRequest` to do ajax calls, so we inject it using lib `xhr2`
   (set! js/XMLHttpRequest (nodejs/require "xhr2"))
 
+  (reset! views/is-static true)
+
   (let [parsed (parse-opts args cli-options)
         opts (:options parsed)
         errs (:errors parsed)
@@ -113,8 +115,8 @@
                   (:source-dir opts))
         src-html (:source-html opts)
         src-html (if (and (nil? src-html) (not (nil? src-dir)))
-                (path/join src-dir "index.html")
-                src-html)
+                   (path/join src-dir "index.html")
+                   src-html)
 
         mandatory-args (case mode
 
@@ -165,7 +167,7 @@
                                    ;; (not (string/includes? src "js/compiled/"))
                                    (not (string/includes? src (path/basename src-html)))
                                    ;; )
-                         )})
+                                   )})
          (log "Wrote dest dir"))
 
        (let [html-template (fs/readFileSync src-html #js {:encoding "utf8"})

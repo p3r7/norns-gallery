@@ -41,24 +41,27 @@
 
 (def wide-screen-support false)
 
+(def is-static (atom false))
+
 
 
 ;; VIEW: MAINS
 
 (defn main-view-all []
+  [:div.container-fluid
 
-
-    [:div.container-fluid
-     [filter-panel]
-     (encore/when-let [script-names (-> (:script-list @state)
-                                        keys
-                                        sort
-                                        seq)
-                       ;; filtered-script-names (filter show-script? script-names)
-                       ]
-       [:div.row
-        (doall
-         (map #(gallery-panel %) script-names))])])
+   [:div.filter-panel-container
+    (when-not @is-static
+      [filter-panel])]
+   (encore/when-let [script-names (-> (:script-list @state)
+                                      keys
+                                      sort
+                                      seq)
+                     ;; filtered-script-names (filter show-script? script-names)
+                     ]
+     [:div.row
+      (doall
+       (map #(gallery-panel %) script-names))])])
 
 (defn main-view-all-categorized []
   [:div.container-fluid
