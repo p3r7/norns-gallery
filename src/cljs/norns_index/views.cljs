@@ -270,12 +270,11 @@
       ;; (when wide-screen-support "col-xl-3")
       (when-not (show-script? script-name) "hidden")
       }
-     ;; [:a.gallery-panel-link {:href url}
      [:div.gallery-panel.container-fluid
-      ;; {:on-click (fn [e]
-      ;;              (if (or e.ctrlKey e.metaKey)
-      ;;                (js/window.open url "_blank")
-      ;;                (set! (.. js/window -top -location -href) url)))}
+      {:on-click (fn [e]
+                   (if (or e.ctrlKey e.metaKey)
+                     (js/window.open url "_blank")
+                     (set! (.. js/window -top -location -href) url)))}
       [:div.row
        [:div.col-6
         [screenshot script-name]
@@ -283,13 +282,12 @@
          (doall
           (map #(feature % "random" script-name) feature-icons))]]
        [:div.col-6
-        [:h3.script-name script-name]
+        [:a.script-name {:href url} script-name]
         [:p "by " (map (fn [[author author-url]]
                          ^{:key (str author)}
                          [:span [:a {:href author-url} (str "@" author)] [:br]])
                        author-links)]
         [:p description]]]]
-     ;; ]
      ]))
 
 (defn screenshot [script-name]

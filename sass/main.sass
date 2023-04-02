@@ -37,9 +37,14 @@ h2
   font-size: 1rem
   border-bottom: 1px solid $wikiDarkGrey
 
-h3.script-name
-  font-size: calc(0.8rem + .6vw)
-
+a.script-name
+  /* font-size: calc(0.8rem + .6vw)
+  font-size: calc(1.3rem)
+  // NB: don't make them look like links
+  // -> indeed, for JS-enabled browsers, the whole panel is clickable
+  // -> indeed, for CLI browsers, they will get styled independently of CSS
+  color: inherit
+  text-decoration: inherit
 
 // ------------------------------------------------------------------------
 // SCRIPT PANELS
@@ -84,6 +89,7 @@ h3.script-name
   a
     color: $white
 
+// NB: scripts filtered out
 .hidden
   display: none !important
 
