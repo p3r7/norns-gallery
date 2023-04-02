@@ -54,6 +54,9 @@ h3.script-name {
   .gallery-panel:hover a {
     color: #ffffff; }
 
+.hidden {
+  display: none !important; }
+
 ul.norns-feature-container {
   height: 24px;
   list-style: none;
@@ -76,7 +79,27 @@ ul.norns-feature-container {
 ul.norns-feature-io {
   height: auto; }
 
-.hidden {
-  display: none !important; }
+/* .btn-primary */
+/*   background-color: $wikiLightGrey */
+/*   border: none */
+/* .btn-primary:hover */
+/*   background-color: $wikiBlue */
+/* .btn-check:checked + .btn-primary */
+/*   background-color: $wikiBlue */
+/* .btn-check:focus + .btn-primary */
+/*   /* background-color: $wikiLightGrey */
+/*   border: none */
+/*   -webkit-box-shadow: none */
+/*   -moz-box-shadow: none */
+/*   box-shadow: none */
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #444 !important;
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important; }
+
+.btn-check:checked + .btn-primary {
+  background-color: #f1ba7d !important; }
 
 /*# sourceMappingURL=main.css.map */

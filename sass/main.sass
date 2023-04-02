@@ -84,6 +84,9 @@ h3.script-name
   a
     color: $white
 
+.hidden
+  display: none !important
+
 
 // ------------------------------------------------------------------------
 // IO ICONS
@@ -115,5 +118,19 @@ ul.norns-feature-container
 ul.norns-feature-io
   height: auto
 
-.hidden
-  display: none !important
+
+// ------------------------------------------------------------------------
+// FILTER BUTTONS (BOOSTRAP)
+
+// NB: this is a very quaick brute-force way to do
+// should normally import the boostrap SASS source into this file & set the appropriate variables beforehand
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited
+  background-color: $wikiLightGrey !important
+  border: none !important
+  -webkit-box-shadow: none !important
+  -moz-box-shadow: none !important
+  box-shadow: none !important
+
+.btn-check:checked + .btn-primary
+  background-color: $wikiBlue !important
