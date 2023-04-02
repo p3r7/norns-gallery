@@ -4,9 +4,10 @@
 
 $white: #ffffff
 $black: #000000
-$wikiBlue: #1565c0
-$wikiDarkGrey: #424242
-$wikiLightGrey: #eeeeee
+$wikiBlue:  #f1ba7d
+/* $wikiDarkGrey: #424242
+$wikiDarkGrey: #444
+$wikiLightGrey: #444
 
 
 // ------------------------------------------------------------------------
@@ -36,9 +37,16 @@ h2
   font-size: 1rem
   border-bottom: 1px solid $wikiDarkGrey
 
+h3.script-name
+  font-size: calc(0.8rem + .6vw)
+
 
 // ------------------------------------------------------------------------
 // SCRIPT PANELS
+
+.gallery-panel-link
+  text-decoration: none
+  color: black
 
 .gallery-panel
   background: $wikiLightGrey
@@ -106,3 +114,6 @@ ul.norns-feature-container
 
 ul.norns-feature-io
   height: auto
+
+.hidden
+  display: none !important

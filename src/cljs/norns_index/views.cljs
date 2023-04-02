@@ -51,13 +51,14 @@
     [:div.container-fluid
      [filter-panel]
      (encore/when-let [script-names (-> (:script-list @state)
-                                 keys
-                                 sort
-                                 seq)
-                filtered-script-names (filter show-script? script-names)]
+                                        keys
+                                        sort
+                                        seq)
+                       ;; filtered-script-names (filter show-script? script-names)
+                       ]
        [:div.row
         (doall
-         (map #(gallery-panel %) filtered-script-names))])])
+         (map #(gallery-panel %) script-names))])])
 
 (defn main-view-all-categorized []
   [:div.container-fluid
@@ -262,8 +263,9 @@
     ^{:key (str script-name)}
     [:div.d-block.col-md-6.col-sm-12
      {:class
-      (map name (into categories features))
+      ;; (map name (into categories features))
       ;; (when wide-screen-support "col-xl-3")
+      (when-not (show-script? script-name) "hidden")
       }
      ;; [:a.gallery-panel-link {:href url}
      [:div.gallery-panel.container-fluid
