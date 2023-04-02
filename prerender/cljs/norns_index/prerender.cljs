@@ -161,9 +161,11 @@
                     #js {:force true
                          :recursive true
                          :filter (fn [src _dst]
-                                   (and
-                                    (not (string/includes? src "js/compiled/"))
-                                    (not (string/includes? src (path/basename src-html)))))})
+                                   ;; (and
+                                   ;; (not (string/includes? src "js/compiled/"))
+                                   (not (string/includes? src (path/basename src-html)))
+                                   ;; )
+                         )})
          (log "Wrote dest dir"))
 
        (let [html-template (fs/readFileSync src-html #js {:encoding "utf8"})
