@@ -92,6 +92,8 @@
 
    [nil "--replace-tag REPLACE_TAG" "Tag to replace in source HTML file"
     :default html-string-app-container]
+   [nil "--target-js-tag JS_TAG" "App Js tag to set"
+    :default html-string-app-js]
    ])
 
 (def mandatory-args [:mode])
@@ -117,6 +119,8 @@
         src-html (if (and (nil? src-html) (not (nil? src-dir)))
                    (path/join src-dir "index.html")
                    src-html)
+
+        target-js-tag (:target-js-tag opts)
 
         mandatory-args (case mode
 
@@ -173,9 +177,15 @@
        (let [html-template (fs/readFileSync src-html #js {:encoding "utf8"})
              ;; html-all-scritps (server/render-to-static-markup [views/main-view-all])
              html-all-scritps (str "<div id=\"app\">" (server/render-to-string [views/main-view-all]) "</div>")
+             html-all-scritps (if target-js-tag
+                                     (str html-all-scritps target-js-tag)
+                                     html-all-scritps)
              html-page-all-scritps (-> html-template
-                                       ;; (clojure.string/replace html-string-app-js "")
-                                       (clojure.string/replace (:replace-tag opts) html-all-scritps))]
+                                       (#(if target-js-tag
+                                           (clojure.string/replace % html-string-app-js "")
+                                           %))
+                                       (clojure.string/replace (:replace-tag opts) html-all-scritps))
+             ]
 
          (case mode
 
