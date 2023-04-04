@@ -30,10 +30,14 @@ jobs:
       - name: get node deps
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && npm install
-      - name: build static - clj->js (js builder script)
+      - name: transpile app (cljs->js)
+        run: |
+          lein prod
+      - name: transpile (static) prerender script (cljs->js)
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender
-      - name: build static - js->html
+      - name: run (static) prerender scipt (js->html)
+        # NB: this one is only manily useful in our use-case for retrieving "app.js" under "target/cljsbuild"
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender/main.js --mode dir --dest-dir target/cljsbuild/prod-static/public/
       - name: make archive - js builder script
@@ -41,7 +45,7 @@ jobs:
           tar -czvf static-js-builder-${{ github.ref_name }}.tar.gz target/cljsbuild/prerender/
       - name: make archive - js builder script (unversioned)
         run: |
-          tar -czvf static-js-builder.tar.gz target/cljsbuild/prerender/
+          tar -czvf static-js-builder.tar.gz target/cljsbuild/prerender/ target/cljsbuild/prod-static/public/js/compiled/app.js
       - name: make archive - static site
         run: |
           tar -czvf static-${{ github.ref_name }}.tar.gz -C target/cljsbuild/prod-static/public/ .
