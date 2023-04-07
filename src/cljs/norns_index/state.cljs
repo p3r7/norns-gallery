@@ -2,19 +2,14 @@
   (:require
    [reagent.core :as r]
 
-   [norns-index.conf :as conf]))
+   [norns-index.conf :as conf]
+   [norns-index.init-state :as init-state]))
 
 
 
 ;; STATE
 
-(defonce state (r/atom
-                {:script-list {}
-
-                 :filter {:txt ""
-                          :categories #{}
-                          :io #{}}
-                 }))
+(defonce state (r/atom init-state/state))
 
 
 

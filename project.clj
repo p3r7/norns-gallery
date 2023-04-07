@@ -78,6 +78,14 @@
                 :output-dir "target/cljsbuild/prerender/out"
                 :output-to "target/cljsbuild/prerender/main.js"
                 :npm-deps true
+                :aot-cache true}}
+    {:id "prerender-state"
+     :source-paths ["src/cljc" "src/cljs" "prerender/cljs"]
+     :compiler {:main "norns-index.prerender-state"
+                :target :nodejs
+                :output-dir "target/cljsbuild/prerender-state/out"
+                :output-to "target/cljsbuild/prerender-state/main.js"
+                :npm-deps true
                 :aot-cache true}}]
    }
   )
