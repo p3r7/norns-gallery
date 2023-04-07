@@ -30,6 +30,12 @@ jobs:
       - name: get node deps
         run: |
           export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && npm install
+      - name: pre-fetch state (1)
+        run: |
+          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && lein cljsbuild once prerender-state
+      - name: pre-fetch state (2)
+        run: |
+          export NVM_DIR=$HOME/.nvm && . "$NVM_DIR/nvm.sh" && node target/cljsbuild/prerender-state/main.js
       - name: transpile app (cljs->js)
         run: |
           lein prod
