@@ -3,6 +3,7 @@
    ;; core
    [cljs.nodejs :as nodejs]
    [clojure.string :as string]
+   [clojure.pprint :as pp]
    [clojure.tools.cli :refer [parse-opts]]
    [goog.events :as evt]
    [reagent.core :as r]
@@ -84,7 +85,8 @@
 
      (log "Retrieved script index")
 
-     (write-file (path/join "src/cljs/norns_index" "init-state.cljs") (str "(ns norns-index.init-state)\n(def state " @state/state ")"))
+     ;; (write-file (path/join "src/cljs/norns_index" "init_state2.cljs") (str "(ns norns-index.init-state)\n\n(def state " @state/state ")"))
+     (write-file (path/join "src/cljs/norns_index" "init_state.cljs") (str "(ns norns-index.init-state)\n\n(def state\n" (with-out-str (pp/write @state/state :dispatch pp/code-dispatch))  ")"))
 
      (log "Wrote state")
 
