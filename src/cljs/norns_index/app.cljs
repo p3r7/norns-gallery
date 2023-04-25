@@ -50,29 +50,8 @@
   Gets called both at page load (`init`) and on automatic code reload by shadow-cljs (`on-reload`)."
   []
 
-  (let [query-params (:query (url/url (-> js/window .-location .-href)))
-        random (get query-params "random")
-        category (get query-params "category")
-        connectivity (get query-params "connectivity")
-        author (get query-params "author")]
-    (cond
-      random
-      (mount-app-element [views/main-view-random (edn/read-string random)])
-
-      category
-      (mount-app-element [views/main-view-single-category category])
-
-      connectivity
-      (mount-app-element [views/main-view-single-connectivity-feature connectivity])
-
-      author
-      (mount-app-element [views/main-view-single-author author])
-
-      :else
-      (mount-app-element [views/main-view-all]))
-
-    (dynamic-conf/get-script-index!)) ; NB: gets stored in `norns-index.state/state`
-  )
+  (mount-app-element [views/main-view-all])
+  (dynamic-conf/get-script-index!))
 
 
 

@@ -8,49 +8,37 @@
 (declare
  script-io-features->icons
  ;; sub-views
- random-scripts
  filter-panel
  filter-section-io-feature
- io-panel
- gallery-panel
+ single-script
  screenshot
  feature
- row-by-category row-by-feature row-by-author)
+ row-by-category)
 
 
-
 ;; ASSETS PATHS
 
-;; old implem
-;; (defn script-name->screenshot [script-name]
-;;   (let [author (get-in @state [:script-list script-name :author])]
-;;     (str "https://norns.community/community/" author "/" script-name ".png")))
+(def baseurl "https://vaporwavemall.com/")
 
 (defn author->author-url [author]
-  ;; (str "https://norns.community/en/authors/" author)
-  (str "https://vaporwavemall.com/author#" author))
+  (str baseurl "author#" author))
 
-(defn script-name->screenshot [script-name] (str "https://vaporwavemall.com/assets/screenshots/" script-name ".png"))
+(defn script-name->screenshot [script-name] (str baseurl "assets/screenshots/" script-name ".png"))
 
 (defn script-name->url [script-name]
-  ;; (str "https://norns.community/" (get-in @state [:script-list script-name :path]))
-  (str "https://vaporwavemall.com/" script-name))
+  (str baseurl script-name))
 
-;; (def io-icon-folder "img/feature/")
-(def io-icon-folder "https://vaporwavemall.com/assets/icons/")
-
-(def wide-screen-support false)
+(def io-icon-folder (str baseurl "assets/icons/"))
 
 (def is-static (atom false))
 
 
-
 ;; VIEW: MAINS
 
 (defn main-view-all []
-  [:div.container-fluid
+  [:div.main-view-all
 
-   [:div.filter-panel-container
+   [:div.filters
     (when-not @is-static
       [filter-panel])]
    (encore/when-let [script-names (-> (:script-list @state)
@@ -59,65 +47,26 @@
                                       seq)
                      ;; filtered-script-names (filter show-script? script-names)
                      ]
-     [:div.row
+     [:div.scripts
       (doall
-       (map #(gallery-panel %) script-names))])])
+       (map #(single-script %) script-names))])])
 
 (defn main-view-all-categorized []
-  [:div.container-fluid
-   (doall
-    (map #(row-by-category % :show-header true) conf/script-categories-order))])
-
-(defn main-view-single-category [category-name]
-  [:div.container-fluid
-   [row-by-category category-name]])
-
-(defn main-view-single-connectivity-feature [feature-name]
-  [:div.container-fluid
-   [row-by-feature feature-name]])
-
-(defn main-view-single-author [author]
-  [:div.container-fluid
-   [row-by-author author]])
-
-(defn main-view-random [nb]
-  [:div.container-fluid
-   [random-scripts nb]])
+  (doall
+    (map #(row-by-category % :show-header true) conf/script-categories-order)))
 
 
-
-;; VIEW: I/O LEGEND
-
-(defn io-panel []
-  [:div.row
-   [:div.col-12
-    [:div.gallery-panel.container-fluid
-     [:h2 "i/o icons"]
-     [:ul.norns-feature-container.norns-feature-io.row
-      (doall
-       (map
-        (fn [f]
-          (let [icon ((keyword f) conf/io-feature->icon)]
-            ^{:key (str "io-feature-" f)}
-            [:li
-             {:class (str "col-3 p-0 feature-" icon)}
-             [:img {:src (str io-icon-folder icon ".svg") :alt (str f " support")}]
-             [:p (conf/script-io-features f)]]))
-        (map keyword conf/script-io-features-order)))]]]])
-
-
-
 ;; VIEW: FILTER FORM
 
 (defn categories-filter-form []
-  [:div
+  [:div.categories-filter-form
    (doall
     (map
      (fn [f]
-       (let [checkbox-id (str "btn-category-" f)]
-         ^{:key (str "btn-category-" f)}
-         [:div.form-check.form-check-inline
-          [:input.btn-check
+       (let [checkbox-id (str "checkbox-category-" f)]
+         ^{:key (str "checkbox-category-" f)}
+         [:div
+          [:input
            {:type "checkbox"
             ;; :autocomplete "off"
             :id checkbox-id
@@ -133,19 +82,19 @@
                            (swap! state update-in [:filter :categories] conj (keyword f))
                            (swap! state update-in [:filter :categories] disj (keyword f))))
             }]
-          [:label.btn.btn-primary
+          [:label
            {:for checkbox-id} f]]))
      (map name conf/script-categories-order)))])
 
 (defn io-filter-form []
-  [:div
+  [:div.io-filter-form
    (doall
     (map
      (fn [f]
-       (let [checkbox-id (str "btn-io-" f)]
-         ^{:key (str "btn-io-" f)}
-         [:div.form-check.form-check-inline
-          [:input.btn-check
+       (let [checkbox-id (str "checkbox-io-" f)]
+         ^{:key (str "checkbox-io-" f)}
+         [:div
+          [:input
            {:type "checkbox"
             ;; :autocomplete "off"
             :id checkbox-id
@@ -161,36 +110,17 @@
                            (swap! state update-in [:filter :io] conj (keyword f))
                            (swap! state update-in [:filter :io] disj (keyword f))))
             }]
-          [:label.btn.btn-primary
+          [:label
            {:for checkbox-id} f]]))
      (map name conf/script-io-features-order)))])
 
 (defn filter-panel []
-  [:div
+  [:div.filter-panel
    [categories-filter-form]
    [io-filter-form]]
   )
 
 
-
-;; VIEW: (RANDOM) FEATURED SCRIPT
-
-(defn random-scripts [nb]
-  (let [script-list (:script-list @state)]
-    (when (< 0 (count script-list))
-      (let [random-script-names (-> (take-n-distinct-rand nb (keys script-list))
-                                    vec
-                                    shuffle)]
-        [:div.row
-         (doall
-          (map
-           (fn [script-name]
-             ^{:key (str "random-" script-name)}
-             [gallery-panel script-name])
-           random-script-names))]))))
-
-
-
 ;; VIEW: SCRIPT CATEGORY
 
 (defn row-by-category [script-category & {:keys [show-header]}]
@@ -208,51 +138,13 @@
        [:div.col-12
         [:h1 (get conf/script-categories script-category)]])
      (doall
-      (map #(gallery-panel %) matched-scripts))]))
+      (map #(single-script %) matched-scripts))]))
 
 
-
-;; VIEW: SCRIPT GROUPED BY CONNECTIVITY
 
-(defn row-by-feature [feature-name & {:keys [show-header]}]
-  (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
-                                           (and
-                                            (member? (keyword feature-name) (:features script-props))
-                                            (show-script? script-name)
-                                            )) (:script-list @state))
-                                 keys
-                                 sort
-                                 seq)]
-    ^{:key (str feature-name)}
-    [:div.row
-     (when show-header
-       [:div.col-12
-        [:h1 (get conf/script-io-features feature-name)]])
-     (doall
-      (map #(gallery-panel %) matched-scripts))]))
-
-
-
-;; VIEW: SCRIPT AUTHOR
-
-(defn row-by-author [author]
-  (when-let [matched-scripts (-> (filter (fn [[script-name script-props]]
-                                           (and
-                                            (member? author (:author script-props))
-                                            (show-script? script-name)
-                                            )) (:script-list @state))
-                                 keys
-                                 sort
-                                 seq)]
-    ^{:key (str author)}
-    [:div.row
-     (doall
-      (map #(gallery-panel %) matched-scripts))]))
-
-
 ;; VIEWS: SCRIPT PANEL
 
-(defn gallery-panel [script-name]
+(defn single-script [script-name]
   (let [url (script-name->url script-name)
         script (get-in @state [:script-list script-name])
         description (:description script)
@@ -264,36 +156,28 @@
         categories (:types script)
         ]
     ^{:key (str script-name)}
-    [:div.d-block.col-md-6.col-sm-12
+    [:div
      {:class
       ;; (map name (into categories features))
-      ;; (when wide-screen-support "col-xl-3")
       (when-not (show-script? script-name) "hidden")
       }
-     [:div.gallery-panel.container-fluid
-      {:on-click (fn [e]
-                   (if (or e.ctrlKey e.metaKey)
-                     (js/window.open url "_blank")
-                     (set! (.. js/window -top -location -href) url)))}
-      [:div.row
-       [:div.col-6
+     [:div.single-script
+      [:a.single-script-wrapper-link {:href url} script-name
         [screenshot script-name]
-        [:ul.norns-feature-container
-         (doall
-          (map #(feature % "random" script-name) feature-icons))]]
-       [:div.col-6
+        [:ul.feature
+          (doall
+          (map #(feature % "random" script-name) feature-icons))]
         [:a.script-name {:href url} script-name]
         [:p "by " (map (fn [[author author-url]]
-                         ^{:key (str author)}
-                         [:span [:a {:href author-url} (str "@" author)] [:br]])
-                       author-links)]
-        [:p description]]]]
-     ]))
+                          ^{:key (str author)}
+                          [:span [:a {:href author-url} (str "@" author)] [:br]])
+                        author-links)]
+        [:p description]]]
+    ]))
 
 (defn screenshot [script-name]
-    [:div.norns-screenshot-container
-     [:img.img-norns-screenshot-default {:alt " " :src (str "https://norns.community/meta/scriptname.png")}]
-     [:img.img-norns-screenshot {:alt " " :src (script-name->screenshot script-name)}]
+    [:div.screenshot
+     [:img {:alt " " :src (script-name->screenshot script-name)}]
      ])
 
 (defn feature [feature-name & [script-category script-name]]
@@ -302,7 +186,6 @@
    [:img {:src (str io-icon-folder feature-name ".svg") :alt feature-name}]])
 
 
-
 ;; HELPERS - I/O FEATURES ICONS
 
 (defn script-io-features->icons [features]

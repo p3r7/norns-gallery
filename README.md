@@ -41,13 +41,7 @@ Changes to the code are automatically detected and hot-swapped in the running br
 
 ## Setup: CSS
 
-The project relies on [Bootstrap](https://getbootstrap.com/).
-
-In addition, custom styles are defined under [sass/main.sass](./sass/main.sass).
-
-To be compiled, it needs a SASS compiler.
-
-After changes, Sass must be compiled:
+Compile SASS with:
 
     $ sass sass/main.sass:resources/public/css/main.css
 
